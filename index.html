@@ -24,9 +24,8 @@
         /* --- 1. THE DOODLE PORTAL --- */
       #portal {
             position: fixed; inset: 0; z-index: 10000; background: #fff;
-            /* Using your specific ImageKit URL */
             background-image: url('https://ik.imagekit.io/22h7wv5o2/doodle.jpg?updatedAt=1773773281436');
-            background-size: 500px; /* Adjusted for detail */
+            background-size: 500px;
             display: flex; align-items: center; justify-content: center;
             transition: clip-path 2.2s cubic-bezier(0.8, 0, 0.2, 1); 
             clip-path: circle(150% at 50% 50%);
@@ -43,13 +42,28 @@
         .portal-card h1 { font-family: 'Bebas Neue'; font-size: 5rem; color: #000; line-height: 0.8; }
         .melt-exit { clip-path: circle(0% at 50% 50%) !important; }
 
-        /* --- 2. THE CHAMELEON REAL-TIME ENVIRONMENT --- */
-        .chameleon-bg { position: fixed; inset: 0; z-index: -2; background: #000; animation: colorShift 25s infinite alternate; }
-        @keyframes colorShift { 0% { filter: hue-rotate(0deg) brightness(0.4); } 100% { filter: hue-rotate(360deg) brightness(0.6); } }
+        /* --- 2. THE CHAMELEON DARK-FLOW ENVIRONMENT (UPDATED) --- */
+        .chameleon-bg { 
+            position: fixed; 
+            inset: 0; 
+            z-index: -2; 
+            background: linear-gradient(125deg, #050505, #0a0a0a, #050505);
+            background-size: 400% 400%;
+            animation: darkFlow 30s ease infinite; 
+        }
+
+        @keyframes darkFlow {
+            0% { background-color: hsl(0, 40%, 4%); background-position: 0% 50%; }
+            20% { background-color: hsl(280, 40%, 4%); }
+            40% { background-color: hsl(210, 40%, 4%); }
+            60% { background-color: hsl(150, 40%, 4%); background-position: 100% 50%; }
+            80% { background-color: hsl(40, 40%, 4%); }
+            100% { background-color: hsl(360, 40%, 4%); background-position: 0% 50%; }
+        }
         
         .vignette { 
             position: fixed; inset: 0; z-index: -1; 
-            background: radial-gradient(circle at center, transparent 0%, rgba(0,0,0,0.4) 40%, rgba(0,0,0,1) 100%); 
+            background: radial-gradient(circle at center, transparent 0%, rgba(0,0,0,0.5) 50%, rgba(0,0,0,1) 100%); 
             pointer-events: none; 
         }
 
@@ -70,7 +84,7 @@
             will-change: font-variation-settings, font-weight, letter-spacing;
         }
 
-        /* --- 4. OBSIDIAN TRACK CARDS (SPRING PHYSICS) --- */
+        /* --- 4. OBSIDIAN TRACK CARDS --- */
         .scroll-list { flex: 1; overflow-y: auto; padding: 0 20px 280px; scrollbar-width: none; perspective: 1000px; }
         .scroll-list::-webkit-scrollbar { display: none; }
 
@@ -82,7 +96,6 @@
             padding: 28px; backdrop-filter: blur(50px); display: flex; align-items: center; gap: 20px;
             transition: transform 0.1s linear, background 0.4s, box-shadow 0.4s; position: relative; z-index: 2;
         }
-        /* Obsidian Glint */
         .track-card::after { 
             content: ''; position: absolute; inset: 0; 
             background: linear-gradient(115deg, transparent 40%, rgba(255,255,255,0.12) 50%, transparent 60%); 
@@ -164,7 +177,6 @@
         let songs = [], currentIdx = -1, queue = [], analyzer, dataArray;
         let startX = 0, currentX = 0;
 
-        // --- 1. BUTTERY SHAPESHIFTING LOGIC ---
         const fontStates = [
             { family: "'Playfair Display'", weight: "900", spacing: "-4px", style: "italic" },
             { family: "'Inter'", weight: "100", spacing: "14px", style: "normal" },
@@ -185,7 +197,6 @@
         }
         setInterval(morph, 5000);
 
-        // --- 2. GLOBAL REACTIVITY (ORB & DOCK) ---
         function handleGlobal(e) {
             const orb = document.getElementById('orb');
             const x = e.clientX || (e.touches ? e.touches[0].clientX : 0);
@@ -202,7 +213,6 @@
             }
         }
 
-        // --- 3. AUDIO ANALYSIS (BASS PULSE) ---
         function initAudioEngine() {
             const ctx = new (window.AudioContext || window.webkitAudioContext)();
             const src = ctx.createMediaElementSource(audio);
@@ -220,14 +230,15 @@
             const bass = dataArray[2] / 255;
             document.getElementById('orb').style.transform = `translate(-50%, -50%) scale(${1 + bass * 1.2})`;
             document.getElementById('orb').style.opacity = 0.15 + (bass * 0.5);
+            // Subtle brightness boost on bass hits
+            document.querySelector('.chameleon-bg').style.filter = `brightness(${1 + bass * 0.5})`;
         }
 
-        // --- 4. CORE FUNCTIONALITY ---
         function ignite() {
             document.getElementById('portal').classList.add('melt-exit');
             document.getElementById('app').style.opacity = "1";
             initAudioEngine();
-            morph(); // Trigger first font
+            morph();
             loadSongs();
         }
 
@@ -255,7 +266,6 @@
             `).join('');
         }
 
-        // --- 5. SPRING GESTURE SYSTEM ---
         function ts(e, i) { startX = e.touches[0].clientX; }
         function tm(e, i) { 
             currentX = e.touches[0].clientX - startX; 
@@ -273,7 +283,7 @@
                 t.classList.add('show');
                 setTimeout(()=>t.classList.remove('show'), 2500);
             }
-            card.style.transition = "transform 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275)"; // Spring snap
+            card.style.transition = "transform 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275)";
             card.style.transform = `translateX(0)`;
             document.getElementById(`hint-${i}`).style.opacity = 0;
             setTimeout(() => card.style.transition = "transform 0.1s linear", 500);
