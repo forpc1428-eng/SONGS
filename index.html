@@ -1,182 +1,149 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>V Music Pro Tuned</title>
-<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&display=swap" rel="stylesheet">
-<style>
-*{margin:0;padding:0;box-sizing:border-box}
-body{background:#000;color:#fff;font-family:'Playfair Display',serif;overflow:hidden}
-.glass{background:rgba(255,255,255,0.04);backdrop-filter:blur(40px);border:1px solid rgba(255,255,255,0.08)}
-#landing{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;z-index:10}
-.orb{width:120px;height:120px;border-radius:50%;background:radial-gradient(circle,#fff,#aaa);display:flex;align-items:center;justify-content:center;font-size:40px;cursor:pointer;animation:pulse 2s infinite}
-@keyframes pulse{0%{transform:scale(1)}50%{transform:scale(1.08)}100%{transform:scale(1)}}
-#app{display:none;height:100vh;flex-direction:column}
-.main{display:flex;flex:1}
-.sidebar{width:220px;padding:20px}
-.grid{flex:1;padding:20px;display:grid;gap:20px}
-@media(min-width:600px){.grid{grid-template-columns:repeat(auto-fill,minmax(200px,1fr))}}
-@media(max-width:599px){.grid{grid-template-columns:1fr}}
-.card{padding:20px;border-radius:20px;cursor:pointer;transition:.4s cubic-bezier(0.19,1,0.22,1);box-shadow:0 15px 45px rgba(0,0,0,0.6)}
-.card:hover{transform:perspective(1000px) rotateX(5deg) rotateY(5deg)}
-.player{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);width:90%;max-width:600px;padding:15px;border-radius:50px}
-.progress{position:absolute;top:0;left:0;height:2px;background:#fff;width:0%}
-.search{width:100%;padding:10px;border:none;border-radius:10px;margin-bottom:20px;background:rgba(255,255,255,0.05);color:#fff}
-</style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>VEDANT | DIRECT ACCESS</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&family=Playfair+Display:wght@900&display=swap" rel="stylesheet">
+    <style>
+        :root { --bg: #000; --glass: rgba(255,255,255,0.05); --border: rgba(255,255,255,0.1); }
+        * { margin: 0; padding: 0; box-sizing: border-box; -webkit-font-smoothing: antialiased; }
+        body { background: var(--bg); color: #fff; font-family: 'Inter', sans-serif; overflow: hidden; height: 100vh; }
+
+        /* MOURGAN HEADER */
+        header { padding: 40px 20px 20px; border-bottom: 1px solid var(--border); }
+        h1 { font-family: 'Playfair Display'; font-size: 2.5rem; letter-spacing: -1px; background: linear-gradient(#fff, #666); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+
+        /* THE FOLDER LIST */
+        .song-list { height: calc(100vh - 220px); overflow-y: auto; padding: 20px; }
+        .track { 
+            display: flex; align-items: center; padding: 15px; background: var(--glass); 
+            border-radius: 12px; margin-bottom: 10px; border: 1px solid transparent; transition: 0.2s;
+        }
+        .track.active { border-color: #fff; background: rgba(255,255,255,0.1); }
+        .track-info { flex: 1; overflow: hidden; margin-left: 15px; }
+        .track-name { font-weight: 700; font-size: 0.95rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        
+        /* DOCK PLAYER */
+        .dock { 
+            position: fixed; bottom: 0; width: 100%; background: #0a0a0a; 
+            border-top: 1px solid var(--border); padding: 20px; height: 140px;
+        }
+        .controls { display: flex; align-items: center; justify-content: center; gap: 30px; margin-top: 10px; }
+        .btn { cursor: pointer; opacity: 0.8; transition: 0.2s; font-size: 1.5rem; }
+        .btn:active { transform: scale(0.8); opacity: 1; }
+        .main-btn { width: 60px; height: 60px; background: #fff; color: #000; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.8rem; }
+        
+        .progress-container { width: 100%; height: 4px; background: rgba(255,255,255,0.1); border-radius: 2px; margin-bottom: 15px; position: relative; cursor: pointer; }
+        .progress-bar { height: 100%; background: #fff; width: 0%; border-radius: 2px; box-shadow: 0 0 10px #fff; }
+    </style>
 </head>
 <body>
-<div id="landing"><div class="orb" id="start">V</div></div>
-<div id="app">
-<div class="main">
-<div class="sidebar glass"><h2>V MUSIC</h2></div>
-<div style="flex:1">
-<input class="search" id="search" placeholder="Search...">
-<div class="grid" id="grid"></div>
+
+<header>
+    <h1>VEDANT</h1>
+    <p style="font-size: 0.7rem; letter-spacing: 5px; opacity: 0.4;">DRIVE ARCHIVE v1.0</p>
+</header>
+
+<div class="song-list" id="songList">
+    <p style="text-align: center; margin-top: 50px; opacity: 0.3;">CONNECTING TO DRIVE...</p>
 </div>
+
+<div class="dock">
+    <div class="progress-container" id="progCont">
+        <div class="progress-bar" id="progBar"></div>
+    </div>
+    
+    <div style="text-align: center; margin-bottom: 10px;">
+        <p id="nowPlaying" style="font-size: 0.85rem; font-weight: 700; opacity: 0.8;">Select a track</p>
+    </div>
+
+    <div class="controls">
+        <div class="btn" onclick="prev()">⏮</div>
+        <div class="btn main-btn" id="playBtn" onclick="togglePlay()">▶</div>
+        <div class="btn" onclick="next()">⏭</div>
+    </div>
 </div>
-</div>
-<div class="player glass" id="player" style="display:none">
-<div class="progress" id="progress"></div>
-<div id="now">Nothing Playing</div>
-<button onclick="toggle()">Play/Pause</button>
-</div>
+
+<audio id="player"></audio>
+
 <script>
-const API="https://script.google.com/macros/s/AKfycbwwYEAgMQTV5yulcPTnFwt2-lVzJOXxJU88G5x3ZcmaTzfi4uOzl81kcAlzqj_yhObg/exec";
+    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwwYEAgMQTV5yulcPTnFwt2-lVzJOXxJU88G5x3ZcmaTzfi4uOzl81kcAlzqj_yhObg/exec";
+    const audio = document.getElementById('player');
+    let songs = [];
+    let currentIndex = -1;
 
-let audio=new Audio();
-audio.preload="auto";
-audio.crossOrigin="anonymous";
-audio.playsInline=true;
-
-let songs=[];
-let currentIndex=0;
-let nextReady=false;
-
-// HARDENED IGNITION
-start.onclick=async()=>{
-  try{
-    audio.src="data:audio/mp3;base64,//uQxAAAAAAAAAAAAAAAAAAAAAA";
-    await audio.play(); audio.pause(); audio.src="";
-  }catch(e){}
-  landing.style.display='none';
-  app.style.display='flex';
-  load();
-}
-
-// LOAD DATA
-async function load(){
-  const res=await fetch(API);
-  const data=await res.json();
-  songs=data.map(s=>({
-    title:s.name.replace('.mp3','').replaceAll('_',' '),
-    url:s.link
-  }));
-  render(songs);
-}
-
-// RENDER
-function render(list){
-  grid.innerHTML='';
-  list.forEach((s,i)=>{
-    let div=document.createElement('div');
-    div.className='card glass';
-    div.innerText=s.title;
-    div.onclick=()=>play(i);
-    grid.appendChild(div);
-  });
-}
-
-// SEARCH
-search.oninput=(e)=>{
-  let q=e.target.value.toLowerCase();
-  render(songs.filter(s=>s.title.toLowerCase().includes(q)));
-}
-
-// PRELOAD NEXT TRACK (CRITICAL FOR SMOOTHNESS)
-let nextAudio=new Audio();
-nextAudio.preload="auto";
-
-function preloadNext(){
-  let next=songs[currentIndex+1];
-  if(!next) return;
-  nextAudio.src=next.url;
-  nextAudio.load();
-  nextReady=true;
-}
-
-// PLAY ENGINE (OPTIMIZED)
-async function play(i){
-  try{
-    currentIndex=i;
-    let s=songs[i];
-
-    // stop current cleanly
-    audio.pause();
-    audio.src="";
-
-    // assign new
-    audio.src=s.url;
-    audio.load();
-
-    // start immediately
-    await audio.play();
-
-    player.style.display='block';
-    now.innerText=s.title;
-
-    // preload next instantly
-    nextReady=false;
-    preloadNext();
-
-  }catch(e){
-    console.error(e);
-    alert("Playback failed");
-  }
-}
-
-// GAPLESS SWITCH (IMPORTANT)
-audio.addEventListener('ended',async()=>{
-  if(currentIndex+1 < songs.length){
-    currentIndex++;
-    let s=songs[currentIndex];
-
-    if(nextReady){
-      audio.src=nextAudio.src;
-      nextAudio=new Audio();
-      nextAudio.preload="auto";
-    }else{
-      audio.src=s.url;
+    // FETCH DATA
+    async function loadData() {
+        try {
+            const response = await fetch(SCRIPT_URL);
+            songs = await response.json();
+            renderList();
+        } catch (e) {
+            document.getElementById('songList').innerHTML = `<p style="color:red; text-align:center;">ERROR: CHECK SCRIPT DEPLOYMENT</p>`;
+        }
     }
 
-    audio.load();
-    await audio.play();
-    now.innerText=s.title;
+    function renderList() {
+        document.getElementById('songList').innerHTML = songs.map((s, i) => `
+            <div class="track" id="t-${i}" onclick="playSong(${i})">
+                <div style="font-weight:900; opacity:0.2;">${(i+1).toString().padStart(2, '0')}</div>
+                <div class="track-info">
+                    <div class="track-name">${s.name.replace('.mp3', '')}</div>
+                </div>
+            </div>
+        `).join('');
+    }
 
-    preloadNext();
-  }
-});
+    function playSong(index) {
+        if (index < 0 || index >= songs.length) return;
+        currentIndex = index;
+        
+        // UI Updates
+        document.querySelectorAll('.track').forEach(t => t.classList.remove('active'));
+        document.getElementById(`t-${index}`).classList.add('active');
+        document.getElementById('nowPlaying').innerText = songs[index].name.replace('.mp3', '');
+        document.getElementById('playBtn').innerText = "⏸";
 
-function toggle(){audio.paused?audio.play():audio.pause();}
+        // Audio Logic
+        const url = songs[index].link;
+        // Bypassing proxy errors by using the Direct Export link if available
+        const fileId = url.split('id=')[1]?.split('&')[0];
+        audio.src = fileId ? `https://docs.google.com/uc?export=download&id=${fileId}` : url;
+        
+        audio.play().catch(e => {
+            console.log("Playback blocked - tap play button");
+        });
+    }
 
-// ULTRA SMOOTH PROGRESS
-function loop(){
-  if(audio.duration){
-    progress.style.width=(audio.currentTime/audio.duration)*100+'%';
-  }
-  requestAnimationFrame(loop);
-}
-loop();
+    function togglePlay() {
+        if (currentIndex === -1) { playSong(0); return; }
+        if (audio.paused) { audio.play(); document.getElementById('playBtn').innerText = "⏸"; }
+        else { audio.pause(); document.getElementById('playBtn').innerText = "▶"; }
+    }
 
-// BUFFER UX IMPROVEMENT
-audio.addEventListener('waiting',()=>{now.innerText="Buffering..."});
-audio.addEventListener('playing',()=>{now.innerText=songs[currentIndex]?.title || ""});
+    function next() { playSong((currentIndex + 1) % songs.length); }
+    function prev() { playSong((currentIndex - 1 + songs.length) % songs.length); }
 
-// NETWORK RESILIENCE
-audio.addEventListener('error',()=>{
-  console.log("retrying...");
-  setTimeout(()=>play(currentIndex),1000);
-});
+    // Progress Logic
+    audio.ontimeupdate = () => {
+        const p = (audio.currentTime / audio.duration) * 100;
+        document.getElementById('progBar').style.width = p + "%";
+    };
+    
+    // Seek logic
+    document.getElementById('progCont').onclick = (e) => {
+        const rect = e.target.getBoundingClientRect();
+        const x = e.clientX - rect.left;
+        const width = rect.right - rect.left;
+        audio.currentTime = (x / width) * audio.duration;
+    };
+
+    // Auto-next
+    audio.onended = () => next();
+
+    loadData();
 </script>
+
 </body>
 </html>
