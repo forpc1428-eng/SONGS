@@ -1,235 +1,251 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>V-CORE INFINITY ULTRA</title>
-<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;800&family=Playfair+Display:wght@900&display=swap" rel="stylesheet">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <title>VEDANT'S PLAYLIST | INFINITY</title>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;600;800&family=Playfair+Display:ital,wght@0,900;1,900&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --accent: #00f2ff;
+            --glass: rgba(255, 255, 255, 0.03);
+            --border: rgba(255, 255, 255, 0.08);
+            --card-bg: rgba(255, 255, 255, 0.05);
+        }
 
-<style>
-:root{
---glass:rgba(255,255,255,0.05);
---border:rgba(255,255,255,0.12);
---glow:0 0 40px rgba(255,255,255,0.15);
---font:'Plus Jakarta Sans',sans-serif;
-}
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Plus Jakarta Sans', sans-serif; -webkit-tap-highlight-color: transparent; }
+        body { background: #000; color: #fff; height: 100vh; overflow: hidden; position: fixed; width: 100%; }
 
-*{margin:0;padding:0;box-sizing:border-box;font-family:var(--font)}
-body{
-background:#020202;
-color:#fff;
-overflow:hidden;
-}
+        /* --- 1. HOLOGRAPHIC LANDING (2 SEC) --- */
+        #landing {
+            position: fixed; inset: 0; z-index: 10000; background: #000;
+            display: flex; flex-direction: column; align-items: center; justify-content: center;
+            transition: clip-path 1.5s cubic-bezier(0.77, 0, 0.175, 1);
+            clip-path: circle(150% at 50% 50%);
+        }
+        .v-core-char {
+            width: 100px; height: 100px; background: var(--accent);
+            border-radius: 30% 70% 70% 30% / 30% 30% 70% 70%;
+            animation: morph 3s linear infinite alternate, glow 2s ease-in-out infinite;
+            display: flex; align-items: center; justify-content: center;
+            font-family: 'Playfair Display'; font-size: 2.5rem; color: #000;
+        }
+        @keyframes morph {
+            0% { border-radius: 30% 70% 70% 30% / 30% 30% 70% 70%; transform: rotate(0deg); }
+            100% { border-radius: 50% 50% 33% 67% / 55% 27% 73% 45%; transform: rotate(20deg); }
+        }
+        @keyframes glow { 0%, 100% { box-shadow: 0 0 20px var(--accent); } 50% { box-shadow: 0 0 50px var(--accent); } }
+        
+        .typo-anim {
+            margin-top: 30px; font-family: 'Playfair Display'; font-size: 1.2rem;
+            letter-spacing: 15px; opacity: 0; animation: typoFade 2s forwards;
+        }
+        @keyframes typoFade {
+            0% { opacity: 0; letter-spacing: 25px; filter: blur(10px); }
+            50% { opacity: 1; filter: blur(0px); }
+            100% { opacity: 0; letter-spacing: 10px; }
+        }
 
-/* CINEMATIC BACKGROUND */
-.bg{
-position:fixed;inset:0;
-background:radial-gradient(circle at 20% 30%,#111,transparent 60%),
-radial-gradient(circle at 80% 70%,#0a0a0a,transparent 60%),
-#000;
-z-index:-2;
-}
+        /* --- 2. DYNAMIC AURORA ENVIRONMENT --- */
+        .aurora {
+            position: fixed; inset: 0; z-index: -1;
+            background: #000; overflow: hidden;
+        }
+        .blob {
+            position: absolute; width: 80vw; height: 80vh; border-radius: 50%;
+            filter: blur(120px); opacity: 0.2; animation: float 20s infinite alternate;
+        }
+        .b1 { background: #7000ff; top: -10%; left: -10%; }
+        .b2 { background: #00f2ff; bottom: -10%; right: -10%; animation-delay: -5s; }
+        @keyframes float { from { transform: translate(0,0) scale(1); } to { transform: translate(10vw, 10vh) scale(1.2); } }
 
-.noise{
-position:fixed;inset:0;
-background:url('https://grainy-gradients.vercel.app/noise.svg');
-opacity:0.05;
-z-index:-1;
-}
+        /* --- 3. SPATIAL UI --- */
+        .container { 
+            display: flex; flex-direction: column; height: 100vh; 
+            padding: env(safe-area-inset-top) 0 env(safe-area-inset-bottom);
+            opacity: 0; transform: scale(1.1); transition: 1.5s cubic-bezier(0.19, 1, 0.22, 1);
+        }
 
-.container{height:100vh;display:flex;flex-direction:column}
+        header { padding: 60px 30px 20px; z-index: 10; }
+        .site-title {
+            font-family: 'Playfair Display'; font-size: 3.5rem; line-height: 0.9;
+            background: linear-gradient(180deg, #fff, rgba(255,255,255,0.2));
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+            transition: 0.1s linear;
+        }
 
-header{padding:40px 25px}
-header h1{
-font-family:'Playfair Display';
-font-size:3.8rem;
-letter-spacing:-2px;
-background:linear-gradient(90deg,#fff,#888);
--webkit-background-clip:text;
--webkit-text-fill-color:transparent;
-}
+        /* --- 4. SCROLLYTELLING LIST --- */
+        .scroll-list {
+            flex: 1; overflow-y: auto; padding: 0 25px 220px;
+            scrollbar-width: none; perspective: 1000px;
+        }
+        .scroll-list::-webkit-scrollbar { display: none; }
 
-.search-box{
-margin:0 25px 20px;
-padding:18px;
-border-radius:25px;
-background:var(--glass);
-border:1px solid var(--border);
-backdrop-filter:blur(25px);
-color:#fff;
-outline:none;
-box-shadow:var(--glow);
-}
+        .track-card {
+            background: var(--card-bg); border: 1px solid var(--border);
+            border-radius: 28px; padding: 22px; margin-bottom: 12px;
+            backdrop-filter: blur(20px); transition: 0.3s cubic-bezier(0.2, 0.8, 0.2, 1);
+            display: flex; align-items: center; gap: 15px; cursor: pointer;
+        }
+        .track-card.active { background: #fff; color: #000; transform: scale(0.97); }
+        .track-name { font-weight: 800; font-size: 0.95rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; flex: 1; }
 
-.list{
-flex:1;
-overflow:auto;
-padding:0 25px 200px;
-}
+        /* --- 5. VISION PRO DOCK --- */
+        .dock {
+            position: fixed; bottom: 25px; left: 15px; right: 15px;
+            background: rgba(10, 10, 10, 0.6); backdrop-filter: blur(40px);
+            border: 1px solid var(--border); border-radius: 40px;
+            padding: 25px; z-index: 1000; box-shadow: 0 20px 50px rgba(0,0,0,0.5);
+        }
 
-.track{
-padding:22px;
-margin-bottom:12px;
-border-radius:25px;
-background:linear-gradient(145deg,rgba(255,255,255,0.04),rgba(255,255,255,0.01));
-border:1px solid var(--border);
-backdrop-filter:blur(20px);
-transition:0.3s;
-cursor:pointer;
-}
+        .seek-system { margin-bottom: 20px; }
+        .bar-rail { width: 100%; height: 6px; background: rgba(255,255,255,0.1); border-radius: 10px; position: relative; cursor: pointer; }
+        .bar-fill { height: 100%; width: 0%; background: #fff; border-radius: 10px; position: relative; box-shadow: 0 0 20px #fff; }
+        .bar-fill::after { content: ''; position: absolute; right: -6px; top: -5px; width: 16px; height: 16px; background: #fff; border-radius: 50%; }
 
-.track:hover{
-transform:translateY(-3px) scale(1.01);
-box-shadow:0 10px 40px rgba(255,255,255,0.08);
-}
+        .time-meta { display: flex; justify-content: space-between; margin-top: 10px; font-size: 0.7rem; font-weight: 800; opacity: 0.5; }
 
-.track.active{
-background:#fff;
-color:#000;
-}
+        .controls { display: flex; align-items: center; justify-content: space-between; }
+        .song-info { flex: 1; overflow: hidden; margin-right: 15px; }
+        #now-playing { font-weight: 800; font-size: 1.1rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        
+        .play-btn {
+            width: 55px; height: 55px; background: #fff; color: #000;
+            border-radius: 50%; display: flex; align-items: center; justify-content: center;
+            font-size: 1.2rem; transition: 0.2s;
+        }
+        .play-btn:active { transform: scale(0.9); }
 
-.track-name{font-weight:700}
-
-/* DOCK */
-.dock{
-position:fixed;
-bottom:20px;left:20px;right:20px;
-padding:25px;
-border-radius:35px;
-background:rgba(10,10,10,0.75);
-backdrop-filter:blur(40px);
-border:1px solid var(--border);
-box-shadow:0 20px 80px rgba(0,0,0,0.7);
-}
-
-.bar-bg{
-height:6px;
-background:rgba(255,255,255,0.1);
-border-radius:10px;
-}
-
-.bar-fill{
-height:100%;
-background:#fff;
-width:0;
-border-radius:10px;
-box-shadow:0 0 25px #fff;
-}
-
-.controls{
-display:flex;
-justify-content:space-between;
-align-items:center;
-margin-top:15px;
-}
-
-.play{
-width:60px;height:60px;
-border-radius:50%;
-background:#fff;
-color:#000;
-display:flex;
-align-items:center;
-justify-content:center;
-cursor:pointer;
-transition:0.2s;
-}
-
-.play:active{transform:scale(0.9)}
-
-</style>
+        .melt-exit { clip-path: circle(0% at 50% 50%) !important; }
+    </style>
 </head>
-
 <body>
 
-<div class="bg"></div>
-<div class="noise"></div>
+    <div id="landing">
+        <div class="v-core-char">V</div>
+        <div class="typo-anim">VEDANT'S PLAYLIST</div>
+    </div>
 
-<div class="container">
-<header><h1>LIBRARY</h1></header>
-<input id="search" class="search-box" placeholder="Search tracks..." oninput="filterSongs()">
-<div id="list" class="list"></div>
+    <div class="aurora">
+        <div class="blob b1"></div>
+        <div class="blob b2"></div>
+    </div>
 
-<div class="dock">
-<div class="bar-bg" onclick="seek(event)"><div id="fill" class="bar-fill"></div></div>
-<div class="controls">
-<div id="cur-title">Standby</div>
-<div style="display:flex;gap:20px;align-items:center">
-<div onclick="prev()">⏮</div>
-<div id="playBtn" class="play" onclick="toggle()">▶</div>
-<div onclick="next()">⏭</div>
-</div>
-</div>
-</div>
-</div>
+    <div class="container" id="app">
+        <header>
+            <p style="font-size:0.6rem; letter-spacing:5px; opacity:0.4; margin-bottom:8px;">VEDANT CORE v3.0</p>
+            <h1 class="site-title" id="parallax-title">VEDANT'S<br>PLAYLIST</h1>
+        </header>
 
-<audio id="player"></audio>
+        <div class="scroll-list" id="list">
+            <p style="text-align:center; margin-top:50px; opacity:0.3;">Syncing Cloud Data...</p>
+        </div>
 
-<script>
-const USER="forpc1428-eng";
-const REPO="SONGS";
-const API=`https://api.github.com/repos/${USER}/${REPO}/contents/`;
+        <div class="dock">
+            <div class="seek-system">
+                <div class="bar-rail" id="rail" onclick="seek(event)"><div class="bar-fill" id="fill"></div></div>
+                <div class="time-meta"><span id="cur">0:00</span><span id="total">0:00</span></div>
+            </div>
+            <div class="controls">
+                <div class="song-info"><p id="now-playing">STANDBY</p></div>
+                <div style="display:flex; gap:25px; align-items:center;">
+                    <div onclick="prev()" style="cursor:pointer; font-size:1.5rem;">⏮</div>
+                    <div class="play-btn" onclick="toggle()" id="btn">▶</div>
+                    <div onclick="next()" style="cursor:pointer; font-size:1.5rem;">⏭</div>
+                </div>
+            </div>
+        </div>
+    </div>
 
-const audio=document.getElementById('player');
-let allSongs=[];
-let currentSongs=[];
-let currentIdx=-1;
+    <audio id="player" crossorigin="anonymous"></audio>
 
-async function load(){
-const res=await fetch(API);
-const data=await res.json();
-allSongs=data.filter(f=>f.name.endsWith('.mp3')).map(f=>({
-name:f.name.replace('.mp3',''),
-url:`https://media.githubusercontent.com/media/${USER}/${REPO}/main/${encodeURIComponent(f.name)}`
-}));
-currentSongs=[...allSongs];
-render();
-}
+    <script>
+        const USER = "forpc1428-eng", REPO = "SONGS";
+        const API = `https://api.github.com/repos/${USER}/${REPO}/contents/`;
+        const audio = document.getElementById('player');
+        let songs = [], currentIdx = -1;
 
-function render(){
-list.innerHTML=currentSongs.map((s,i)=>`<div class="track ${i===currentIdx?'active':''}" onclick="playSong(${i})"><div class="track-name">${s.name}</div></div>`).join('');
-}
+        // 1. Landing Sequence
+        setTimeout(() => {
+            document.getElementById('landing').classList.add('melt-exit');
+            const app = document.getElementById('app');
+            app.style.opacity = "1";
+            app.style.transform = "scale(1)";
+            load();
+        }, 2200);
 
-function filterSongs(){
-const q=search.value.toLowerCase();
-currentSongs=allSongs.filter(s=>s.name.toLowerCase().includes(q));
-render();
-}
+        // 2. Parallax Depth Effect
+        document.addEventListener('mousemove', (e) => {
+            const x = (window.innerWidth / 2 - e.pageX) / 30;
+            const y = (window.innerHeight / 2 - e.pageY) / 30;
+            document.getElementById('parallax-title').style.transform = `rotateY(${x}deg) rotateX(${-y}deg)`;
+        });
 
-function playSong(i){
-currentIdx=i;
-const s=currentSongs[i];
-audio.src=s.url;
-audio.play();
-cur-title.innerText=s.name;
-playBtn.innerText="⏸";
-render();
-}
+        // 3. Load Engine
+        async function load() {
+            try {
+                const res = await fetch(API);
+                const data = await res.json();
+                songs = data.filter(f => f.name.endsWith('.mp3')).map(f => ({
+                    name: f.name.replace('.mp3', '').replace(/_/g, ' '),
+                    url: `https://media.githubusercontent.com/media/${USER}/${REPO}/main/${encodeURIComponent(f.name)}`
+                }));
+                render();
+            } catch (e) { console.error("Cloud Sync Failed", e); }
+        }
 
-function toggle(){
-if(currentIdx===-1)return playSong(0);
-if(audio.paused){audio.play();playBtn.innerText="⏸"}
-else{audio.pause();playBtn.innerText="▶"}
-}
+        function render() {
+            const list = document.getElementById('list');
+            list.innerHTML = songs.map((s, i) => `
+                <div class="track-card ${i === currentIdx ? 'active' : ''}" onclick="playSong(${i})">
+                    <div style="font-weight:900; opacity:0.2; font-size:0.7rem;">${(i+1).toString().padStart(2,'0')}</div>
+                    <p class="track-name">${s.name}</p>
+                </div>
+            `).join('');
+        }
 
-function next(){if(currentIdx<currentSongs.length-1)playSong(currentIdx+1)}
-function prev(){if(currentIdx>0)playSong(currentIdx-1)}
+        function playSong(i) {
+            currentIdx = i;
+            audio.src = songs[i].url;
+            audio.play();
+            document.getElementById('now-playing').innerText = songs[i].name;
+            document.getElementById('btn').innerText = "⏸";
+            render();
+            if ('mediaSession' in navigator) {
+                navigator.mediaSession.metadata = new MediaMetadata({ title: songs[i].name, artist: "Vedant's Playlist" });
+            }
+        }
 
-function seek(e){
-const rect=e.currentTarget.getBoundingClientRect();
-audio.currentTime=((e.clientX-rect.left)/rect.width)*audio.duration;
-}
+        function toggle() {
+            if (currentIdx === -1) return playSong(0);
+            audio.paused ? (audio.play(), document.getElementById('btn').innerText = "⏸") : (audio.pause(), document.getElementById('btn').innerText = "▶");
+        }
 
-audio.ontimeupdate=()=>{
-if(!isNaN(audio.duration)){
-fill.style.width=(audio.currentTime/audio.duration*100)+"%";
-}
-}
+        function next() { if(currentIdx < songs.length-1) playSong(currentIdx+1); }
+        function prev() { if(currentIdx > 0) playSong(currentIdx-1); }
 
-audio.onended=()=>next();
+        function seek(e) {
+            const rect = document.getElementById('rail').getBoundingClientRect();
+            audio.currentTime = ((e.clientX - rect.left) / rect.width) * audio.duration;
+        }
 
-load();
-</script>
+        // 4. Scrollytelling Header Effect
+        document.getElementById('list').onscroll = (e) => {
+            const s = e.target.scrollTop;
+            const h = document.querySelector('header');
+            h.style.transform = `translateY(-${s * 0.4}px)`;
+            h.style.opacity = 1 - (s / 400);
+        };
 
+        audio.ontimeupdate = () => {
+            const p = (audio.currentTime / audio.duration) * 100;
+            document.getElementById('fill').style.width = p + "%";
+            document.getElementById('cur').innerText = fmt(audio.currentTime);
+            document.getElementById('total').innerText = fmt(audio.duration || 0);
+        };
+
+        const fmt = (s) => `${Math.floor(s/60)}:${Math.floor(s%60).toString().padStart(2,'0')}`;
+        audio.onended = () => next();
+    </script>
 </body>
 </html>
