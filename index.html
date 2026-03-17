@@ -1,86 +1,68 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-<title>Music</title>
-<style>
-body{background:#000;color:#fff;font-family:Arial}
-.song{padding:14px;border-bottom:1px solid #222;cursor:pointer}
-.active{background:#222}
-.player{position:fixed;bottom:0;width:100%;background:#111;padding:10px}
-</style>
+  <meta charset="UTF-8">
+  <title>Vedant Music Player</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #0f2027;
+      background: linear-gradient(to right, #2c5364, #203a43, #0f2027);
+      color: #fff;
+      text-align: center;
+      padding: 20px;
+    }
+    .song-list {
+      margin-top: 20px;
+    }
+    .song {
+      margin: 10px 0;
+      cursor: pointer;
+      padding: 8px;
+      border-radius: 5px;
+      background: rgba(255,255,255,0.1);
+    }
+    .song:hover {
+      background: rgba(255,255,255,0.2);
+    }
+    audio {
+      margin-top: 20px;
+      width: 80%;
+    }
+  </style>
 </head>
 <body>
+  <h1>🎵 Vedant Music Player</h1>
+  <div id="songList" class="song-list"></div>
+  <audio id="player" controls></audio>
 
-<h2>🎧 My Music</h2>
+  <script>
+    const API_URL = "https://script.google.com/macros/s/AKfycbxjKDwiQuQ8qPyfVjCo4c6pQSMDAVHCC3fpaUieJMe8-Vcoiq6r8dgjAjl0iZ6TDyr4/exec";
+    const songListDiv = document.getElementById("songList");
+    const player = document.getElementById("player");
 
-<div id="songs"></div>
+    async function loadSongs() {
+      try {
+        const res = await fetch(API_URL);
+        const songs = await res.json();
 
-<div class="player">
-<span id="now">Nothing Playing</span>
-<button onclick="prev()">Prev</button>
-<button onclick="toggle()">Play/Pause</button>
-<button onclick="next()">Next</button>
-</div>
+        songs.forEach((song, index) => {
+          const div = document.createElement("div");
+          div.className = "song";
+          div.textContent = `▶ ${song.name}`;
+          div.onclick = () => {
+            player.src = song.link;
+            player.play();
+          };
+          songListDiv.appendChild(div);
+        });
+      } catch (err) {
+        songListDiv.textContent = "Error loading songs.";
+        console.error(err);
+      }
+    }
 
-<audio id="audio"></audio>
-
-<script>
-const API = "https://script.google.com/macros/s/AKfycbxjKDwiQuQ8qPyfVjCo4c6pQSMDAVHCC3fpaUieJMe8-Vcoiq6r8dgjAjl0iZ6TDyr4/exec";
-
-let songs = [];
-let current = -1;
-
-const audio = document.getElementById("audio");
-
-async function load(){
-  const res = await fetch(API);
-  songs = await res.json();
-  render();
-}
-
-function render(){
-  const el = document.getElementById("songs");
-  el.innerHTML = "";
-
-  songs.forEach((s,i)=>{
-    const div = document.createElement("div");
-    div.className="song";
-    div.innerText=s.name; // 🔥 uses sheet name
-    div.onclick=()=>play(i);
-    el.appendChild(div);
-  });
-}
-
-async function play(i){
-  current=i;
-  audio.src=songs[i].link;
-  await audio.play();
-  update();
-}
-
-function update(){
-  document.getElementById("now").innerText = songs[current]?.name || "Nothing Playing";
-  document.querySelectorAll(".song").forEach((e,i)=>{
-    e.classList.toggle("active", i===current);
-  });
-}
-
-function toggle(){
-  audio.paused?audio.play():audio.pause();
-}
-
-function next(){
-  if(current < songs.length-1) play(current+1);
-}
-
-function prev(){
-  if(current > 0) play(current-1);
-}
-
-audio.onended = next;
-
-load();
-</script>
-
+    loadSongs();
+  </script>
 </body>
 </html>
