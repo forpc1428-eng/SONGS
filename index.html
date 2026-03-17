@@ -1,182 +1,158 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Vedant Music</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>VEDANT | V-CORE</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&family=Playfair+Display:wght@900&display=swap" rel="stylesheet">
+    <style>
+        :root { --bg: #000; --glass: rgba(255,255,255,0.05); --border: rgba(255,255,255,0.1); }
+        * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+        body { background: var(--bg); color: #fff; font-family: 'Inter', sans-serif; height: 100vh; overflow: hidden; }
 
-<style>
-body{
-  margin:0;
-  font-family:Arial;
-  background:#000;
-  color:#fff;
-}
+        /* --- LANDING PORTAL --- */
+        #portal {
+            position: fixed; inset: 0; z-index: 9999; background: #000;
+            display: flex; flex-direction: column; align-items: center; justify-content: center;
+            transition: 0.8s cubic-bezier(0.19, 1, 0.22, 1);
+        }
+        .v-orb {
+            width: 100px; height: 100px; border-radius: 50%; background: #fff;
+            display: flex; align-items: center; justify-content: center;
+            box-shadow: 0 0 40px rgba(255,255,255,0.2); cursor: pointer;
+        }
+        .v-orb span { color: #000; font-family: 'Playfair Display'; font-size: 2rem; }
+        .mourgan-title { font-family: 'Playfair Display'; font-size: 3.5rem; margin-top: 20px; background: linear-gradient(#fff, #444); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
 
-h1{
-  text-align:center;
-  padding:20px;
-}
+        /* --- MAIN UI --- */
+        .container { display: flex; flex-direction: column; height: 100vh; opacity: 0; transition: 1s ease; }
+        .active { opacity: 1; }
 
-#songs{
-  padding-bottom:100px;
-}
+        header { padding: 40px 20px 10px; border-bottom: 1px solid var(--border); }
+        .search { width: calc(100% - 40px); margin: 15px 20px; padding: 15px; background: var(--glass); border: 1px solid var(--border); border-radius: 12px; color: #fff; outline: none; }
 
-.song{
-  padding:15px;
-  border-bottom:1px solid #222;
-  cursor:pointer;
-}
+        .list { flex: 1; overflow-y: auto; padding: 0 20px 140px; }
+        .track { display: flex; align-items: center; padding: 15px; background: var(--glass); border-radius: 15px; margin-bottom: 10px; border: 1px solid transparent; }
+        .track.playing { border-color: #fff; background: rgba(255,255,255,0.1); }
+        .track-info { flex: 1; margin-left: 15px; overflow: hidden; }
+        .track-name { font-weight: 700; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 
-.song:hover{
-  background:#111;
-}
-
-.player{
-  position:fixed;
-  bottom:0;
-  left:0;
-  width:100%;
-  background:#111;
-  padding:15px;
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-}
-
-.controls button{
-  margin:5px;
-  padding:10px 15px;
-  border:none;
-  background:#222;
-  color:#fff;
-  cursor:pointer;
-}
-
-.controls button:hover{
-  background:#333;
-}
-</style>
+        /* --- PLAYER DOCK --- */
+        .dock { position: fixed; bottom: 0; width: 100%; background: #080808; border-top: 1px solid var(--border); padding: 15px 20px 30px; height: 130px; }
+        .progress-bar { width: 100%; height: 3px; background: rgba(255,255,255,0.1); border-radius: 2px; margin-bottom: 15px; position: relative; }
+        .progress-fill { height: 100%; background: #fff; width: 0%; box-shadow: 0 0 10px #fff; }
+        .controls { display: flex; align-items: center; justify-content: center; gap: 40px; }
+        .btn { font-size: 1.5rem; cursor: pointer; opacity: 0.8; }
+        .play-btn { width: 55px; height: 55px; background: #fff; color: #000; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.5rem; opacity: 1; }
+    </style>
 </head>
-
 <body>
 
-<h1>🎧 Vedant Music</h1>
+    <div id="portal">
+        <div class="v-orb" onclick="ignite()"><span>V</span></div>
+        <h1 class="mourgan-title">VEDANT</h1>
+    </div>
 
-<div id="songs"></div>
+    <div class="container" id="app">
+        <header>
+            <h2 style="font-family:'Playfair Display'">Archive</h2>
+        </header>
+        <input type="text" class="search" id="search" placeholder="Search tracks...">
+        <div class="list" id="list">
+            <p style="text-align:center; margin-top:40px; opacity:0.3;">Fetching Core Data...</p>
+        </div>
+    </div>
 
-<div class="player">
-  <div id="now">Nothing Playing</div>
-  <div class="controls">
-    <button onclick="prev()">⏮</button>
-    <button onclick="toggle()">⏯</button>
-    <button onclick="next()">⏭</button>
-  </div>
-</div>
+    <div class="dock">
+        <div class="progress-bar"><div class="progress-fill" id="fill"></div></div>
+        <div style="text-align:center; margin-bottom:10px;">
+            <p id="p-name" style="font-size:0.8rem; font-weight:700; opacity:0.6;">Select a track</p>
+        </div>
+        <div class="controls">
+            <div class="btn" onclick="prev()">⏮</div>
+            <div class="play-btn" id="playBtn" onclick="toggle()">▶</div>
+            <div class="btn" onclick="next()">⏭</div>
+        </div>
+    </div>
 
-<script>
-const API = "https://script.google.com/macros/s/AKfycbxjKDwiQuQ8qPyfVjCo4c6pQSMDAVHCC3fpaUieJMe8-Vcoiq6r8dgjAjl0iZ6TDyr4/exec";
+    <audio id="player"></audio>
 
-let songs = [];
-let currentIndex = 0;
+    <script>
+        // REPLACE WITH YOUR DEPLOYED GOOGLE SCRIPT URL
+        const API = "YOUR_NEW_DEPLOYMENT_URL_HERE";
+        
+        const audio = document.getElementById('player');
+        let songs = [];
+        let currentIdx = -1;
 
-const audio = new Audio();
-audio.preload = "auto";
-audio.crossOrigin = "anonymous";
-audio.playsInline = true;
+        async function ignite() {
+            // UNLOCK HARDWARE AUDIO
+            audio.play().then(() => audio.pause()).catch(() => {});
+            
+            document.getElementById('portal').style.transform = "translateY(-100%)";
+            document.getElementById('app').classList.add('active');
+            
+            if (songs.length === 0) load();
+        }
 
-// LOAD SONGS
-async function load(){
-  try{
-    const res = await fetch(API);
-    const data = await res.json();
+        async function load() {
+            try {
+                const r = await fetch(API);
+                songs = await r.json();
+                render(songs);
+            } catch (e) {
+                document.getElementById('list').innerHTML = "<p style='text-align:center; color:red;'>Link Error</p>";
+            }
+        }
 
-    songs = data.map(s => ({
-      title: s.name.replace(".mp3","").replace(".wav","").replaceAll("_"," "),
-      url: s.link
-    }));
+        function render(data) {
+            document.getElementById('list').innerHTML = data.map((s, i) => `
+                <div class="track ${i === currentIdx ? 'playing' : ''}" id="t-${i}" onclick="playSong(${i})">
+                    <div style="opacity:0.2; font-weight:900;">${(i+1).toString().padStart(2,'0')}</div>
+                    <div class="track-info">
+                        <p class="track-name">${s.name.replace('.mp3','')}</p>
+                    </div>
+                </div>
+            `).join('');
+        }
 
-    render();
-  }catch(e){
-    console.error(e);
-    alert("Failed to load songs");
-  }
-}
+        function playSong(idx) {
+            if (idx < 0 || idx >= songs.length) return;
+            currentIdx = idx;
+            
+            // UI Updates
+            render(songs);
+            document.getElementById('p-name').innerText = songs[idx].name.replace('.mp3','');
+            document.getElementById('playBtn').innerText = "⏸";
 
-// RENDER LIST
-function render(){
-  const container = document.getElementById("songs");
-  container.innerHTML = "";
+            // Direct Play
+            audio.src = songs[idx].link;
+            audio.load();
+            audio.play();
+        }
 
-  songs.forEach((s, i)=>{
-    const div = document.createElement("div");
-    div.className = "song";
-    div.innerText = s.title;
-    div.onclick = ()=> play(i);
-    container.appendChild(div);
-  });
-}
+        function toggle() {
+            if (currentIdx === -1) { playSong(0); return; }
+            if (audio.paused) { audio.play(); document.getElementById('playBtn').innerText = "⏸"; }
+            else { audio.pause(); document.getElementById('playBtn').innerText = "▶"; }
+        }
 
-// PLAY FUNCTION
-async function play(i){
-  try{
-    currentIndex = i;
-    const s = songs[i];
+        function next() { playSong((currentIdx + 1) % songs.length); }
+        function prev() { playSong((currentIdx - 1 + songs.length) % songs.length); }
 
-    audio.pause();
-    audio.src = s.link;
-    audio.load();
+        audio.ontimeupdate = () => {
+            const p = (audio.currentTime / audio.duration) * 100;
+            document.getElementById('fill').style.width = p + "%";
+        };
 
-    await audio.play();
+        audio.onended = () => next();
 
-    document.getElementById("now").innerText = s.title;
+        document.getElementById('search').oninput = (e) => {
+            const val = e.target.value.toLowerCase();
+            render(songs.filter(s => s.name.toLowerCase().includes(val)));
+        };
 
-  }catch(err){
-    console.error(err);
-    alert("Playback failed (Drive issue)");
-  }
-}
-
-// CONTROLS
-function toggle(){
-  if(audio.paused){
-    audio.play();
-  }else{
-    audio.pause();
-  }
-}
-
-function next(){
-  if(currentIndex < songs.length - 1){
-    play(currentIndex + 1);
-  }
-}
-
-function prev(){
-  if(currentIndex > 0){
-    play(currentIndex - 1);
-  }
-}
-
-// AUTO NEXT
-audio.addEventListener("ended", ()=>{
-  next();
-});
-
-// BUFFER STATUS (optional but helpful)
-audio.addEventListener("waiting", ()=>{
-  document.getElementById("now").innerText = "Buffering...";
-});
-
-audio.addEventListener("playing", ()=>{
-  if(songs[currentIndex]){
-    document.getElementById("now").innerText = songs[currentIndex].title;
-  }
-});
-
-// INIT
-load();
-</script>
-
+        load(); // Background start
+    </script>
 </body>
 </html>
