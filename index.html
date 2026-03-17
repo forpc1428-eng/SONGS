@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>V Music Pro Tuned</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:#000;color:#fff;font-family:'Playfair Display',serif;overflow:hidden}
+.glass{background:rgba(255,255,255,0.04);backdrop-filter:blur(40px);border:1px solid rgba(255,255,255,0.08)}
+#landing{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;z-index:10}
+.orb{width:120px;height:120px;border-radius:50%;background:radial-gradient(circle,#fff,#aaa);display:flex;align-items:center;justify-content:center;font-size:40px;cursor:pointer;animation:pulse 2s infinite}
+@keyframes pulse{0%{transform:scale(1)}50%{transform:scale(1.08)}100%{transform:scale(1)}}
+#app{display:none;height:100vh;flex-direction:column}
+.main{display:flex;flex:1}
+.sidebar{width:220px;padding:20px}
+.grid{flex:1;padding:20px;display:grid;gap:20px}
+@media(min-width:600px){.grid{grid-template-columns:repeat(auto-fill,minmax(200px,1fr))}}
+@media(max-width:599px){.grid{grid-template-columns:1fr}}
+.card{padding:20px;border-radius:20px;cursor:pointer;transition:.4s cubic-bezier(0.19,1,0.22,1);box-shadow:0 15px 45px rgba(0,0,0,0.6)}
+.card:hover{transform:perspective(1000px) rotateX(5deg) rotateY(5deg)}
+.player{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);width:90%;max-width:600px;padding:15px;border-radius:50px}
+.progress{position:absolute;top:0;left:0;height:2px;background:#fff;width:0%}
+.search{width:100%;padding:10px;border:none;border-radius:10px;margin-bottom:20px;background:rgba(255,255,255,0.05);color:#fff}
+</style>
+</head>
+<body>
+<div id="landing"><div class="orb" id="start">V</div></div>
+<div id="app">
+<div class="main">
+<div class="sidebar glass"><h2>V MUSIC</h2></div>
+<div style="flex:1">
+<input class="search" id="search" placeholder="Search...">
+<div class="grid" id="grid"></div>
+</div>
+</div>
+</div>
+<div class="player glass" id="player" style="display:none">
+<div class="progress" id="progress"></div>
+<div id="now">Nothing Playing</div>
+<button onclick="toggle()">Play/Pause</button>
+</div>
+<script>
+const API="https://script.google.com/macros/s/AKfycbwwYEAgMQTV5yulcPTnFwt2-lVzJOXxJU88G5x3ZcmaTzfi4uOzl81kcAlzqj_yhObg/exec";
+
+let audio=new Audio();
+audio.preload="auto";
+audio.crossOrigin="anonymous";
+audio.playsInline=true;
+
+let songs=[];
+let currentIndex=0;
+let nextReady=false;
+
+// HARDENED IGNITION
+start.onclick=async()=>{
+  try{
+    audio.src="data:audio/mp3;base64,//uQxAAAAAAAAAAAAAAAAAAAAAA";
+    await audio.play(); audio.pause(); audio.src="";
+  }catch(e){}
+  landing.style.display='none';
+  app.style.display='flex';
+  load();
+}
+
+// LOAD DATA
+async function load(){
+  const res=await fetch(API);
+  const data=await res.json();
+  songs=data.map(s=>({
+    title:s.name.replace('.mp3','').replaceAll('_',' '),
+    url:s.link
+  }));
+  render(songs);
+}
+
+// RENDER
+function render(list){
+  grid.innerHTML='';
+  list.forEach((s,i)=>{
+    let div=document.createElement('div');
+    div.className='card glass';
+    div.innerText=s.title;
+    div.onclick=()=>play(i);
+    grid.appendChild(div);
+  });
+}
+
+// SEARCH
+search.oninput=(e)=>{
+  let q=e.target.value.toLowerCase();
+  render(songs.filter(s=>s.title.toLowerCase().includes(q)));
+}
+
+// PRELOAD NEXT TRACK (CRITICAL FOR SMOOTHNESS)
+let nextAudio=new Audio();
+nextAudio.preload="auto";
+
+function preloadNext(){
+  let next=songs[currentIndex+1];
+  if(!next) return;
+  nextAudio.src=next.url;
+  nextAudio.load();
+  nextReady=true;
+}
+
+// PLAY ENGINE (OPTIMIZED)
+async function play(i){
+  try{
+    currentIndex=i;
+    let s=songs[i];
+
+    // stop current cleanly
+    audio.pause();
+    audio.src="";
+
+    // assign new
+    audio.src=s.url;
+    audio.load();
+
+    // start immediately
+    await audio.play();
+
+    player.style.display='block';
+    now.innerText=s.title;
+
+    // preload next instantly
+    nextReady=false;
+    preloadNext();
+
+  }catch(e){
+    console.error(e);
+    alert("Playback failed");
+  }
+}
+
+// GAPLESS SWITCH (IMPORTANT)
+audio.addEventListener('ended',async()=>{
+  if(currentIndex+1 < songs.length){
+    currentIndex++;
+    let s=songs[currentIndex];
+
+    if(nextReady){
+      audio.src=nextAudio.src;
+      nextAudio=new Audio();
+      nextAudio.preload="auto";
+    }else{
+      audio.src=s.url;
+    }
+
+    audio.load();
+    await audio.play();
+    now.innerText=s.title;
+
+    preloadNext();
+  }
+});
+
+function toggle(){audio.paused?audio.play():audio.pause();}
+
+// ULTRA SMOOTH PROGRESS
+function loop(){
+  if(audio.duration){
+    progress.style.width=(audio.currentTime/audio.duration)*100+'%';
+  }
+  requestAnimationFrame(loop);
+}
+loop();
+
+// BUFFER UX IMPROVEMENT
+audio.addEventListener('waiting',()=>{now.innerText="Buffering..."});
+audio.addEventListener('playing',()=>{now.innerText=songs[currentIndex]?.title || ""});
+
+// NETWORK RESILIENCE
+audio.addEventListener('error',()=>{
+  console.log("retrying...");
+  setTimeout(()=>play(currentIndex),1000);
+});
+</script>
+</body>
+</html>
