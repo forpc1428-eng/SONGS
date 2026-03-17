@@ -1,68 +1,149 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>Vedant Music Player</title>
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      background: #0f2027;
-      background: linear-gradient(to right, #2c5364, #203a43, #0f2027);
-      color: #fff;
-      text-align: center;
-      padding: 20px;
-    }
-    .song-list {
-      margin-top: 20px;
-    }
-    .song {
-      margin: 10px 0;
-      cursor: pointer;
-      padding: 8px;
-      border-radius: 5px;
-      background: rgba(255,255,255,0.1);
-    }
-    .song:hover {
-      background: rgba(255,255,255,0.2);
-    }
-    audio {
-      margin-top: 20px;
-      width: 80%;
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>V-CORE | SONGS</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&family=Playfair+Display:wght@900&display=swap" rel="stylesheet">
+    <style>
+        :root { --accent: #fff; --glass: rgba(255,255,255,0.03); --border: rgba(255,255,255,0.08); }
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', sans-serif; }
+        body { background: #000; color: #fff; height: 100vh; overflow: hidden; }
+
+        /* Portal Screen */
+        #portal { position: fixed; inset: 0; z-index: 100; background: #000; display: flex; flex-direction: column; align-items: center; justify-content: center; transition: 1s cubic-bezier(0.19, 1, 0.22, 1); }
+        .v-logo { width: 80px; height: 80px; border: 1px solid #fff; border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: 0.5s; }
+        .v-logo:hover { background: #fff; color: #000; box-shadow: 0 0 50px #fff; }
+        .v-logo span { font-family: 'Playfair Display'; font-size: 2rem; }
+
+        /* Main UI */
+        .container { display: flex; flex-direction: column; height: 100vh; opacity: 0; transition: 1.5s ease; }
+        header { padding: 50px 30px 20px; border-bottom: 1px solid var(--border); }
+        header h1 { font-family: 'Playfair Display'; font-size: 2.5rem; letter-spacing: -1px; }
+
+        .list { flex: 1; overflow-y: auto; padding: 20px; scrollbar-width: none; }
+        .list::-webkit-scrollbar { display: none; }
+        
+        .track { display: flex; align-items: center; padding: 20px; background: var(--glass); border-radius: 20px; margin-bottom: 12px; border: 1px solid var(--border); transition: 0.3s; cursor: pointer; }
+        .track.playing { background: rgba(255,255,255,0.1); border-color: #fff; transform: scale(0.98); }
+        .track-num { opacity: 0.3; font-weight: 900; font-size: 0.8rem; width: 30px; }
+        .track-name { font-weight: 600; font-size: 0.95rem; }
+
+        /* Player Dock */
+        .dock { position: fixed; bottom: 0; width: 100%; background: rgba(0,0,0,0.8); backdrop-filter: blur(20px); border-top: 1px solid var(--border); padding: 20px 30px 40px; }
+        .progress-bar { width: 100%; height: 2px; background: rgba(255,255,255,0.1); margin-bottom: 20px; position: relative; }
+        .progress-fill { height: 100%; background: #fff; width: 0%; box-shadow: 0 0 15px #fff; }
+        
+        .dock-info { text-align: center; margin-bottom: 20px; }
+        #now-playing { font-family: 'Playfair Display'; font-size: 1.2rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+
+        .controls { display: flex; justify-content: center; align-items: center; gap: 40px; font-size: 1.5rem; }
+        .play-btn { width: 60px; height: 60px; background: #fff; color: #000; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.2rem; cursor: pointer; }
+    </style>
 </head>
 <body>
-  <h1>🎵 Vedant Music Player</h1>
-  <div id="songList" class="song-list"></div>
-  <audio id="player" controls></audio>
 
-  <script>
-    const API_URL = "https://script.google.com/macros/s/AKfycbxjKDwiQuQ8qPyfVjCo4c6pQSMDAVHCC3fpaUieJMe8-Vcoiq6r8dgjAjl0iZ6TDyr4/exec";
-    const songListDiv = document.getElementById("songList");
-    const player = document.getElementById("player");
+    <div id="portal" onclick="ignite()">
+        <div class="v-logo"><span>V</span></div>
+        <p style="margin-top:20px; letter-spacing:5px; font-size:0.7rem; opacity:0.5;">INITIALIZE V-CORE</p>
+    </div>
 
-    async function loadSongs() {
-      try {
-        const res = await fetch(API_URL);
-        const songs = await res.json();
+    <div class="container" id="app">
+        <header>
+            <p style="font-size:0.7rem; opacity:0.5; margin-bottom:5px;">LIBRARY / ROOT</p>
+            <h1>SONGS</h1>
+        </header>
 
-        songs.forEach((song, index) => {
-          const div = document.createElement("div");
-          div.className = "song";
-          div.textContent = `▶ ${song.name}`;
-          div.onclick = () => {
-            player.src = song.link;
-            player.play();
-          };
-          songListDiv.appendChild(div);
-        });
-      } catch (err) {
-        songListDiv.textContent = "Error loading songs.";
-        console.error(err);
-      }
-    }
+        <div class="list" id="list">
+            <p style="text-align:center; opacity:0.3; margin-top:50px;">Fetching from GitHub...</p>
+        </div>
 
-    loadSongs();
-  </script>
+        <div class="dock">
+            <div class="progress-bar"><div class="progress-fill" id="fill"></div></div>
+            <div class="dock-info">
+                <p id="now-playing">Select a Track</p>
+            </div>
+            <div class="controls">
+                <div onclick="prev()" style="cursor:pointer">⏮</div>
+                <div class="play-btn" id="playBtn" onclick="toggle()">▶</div>
+                <div onclick="next()" style="cursor:pointer">⏭</div>
+            </div>
+        </div>
+    </div>
+
+    <audio id="player"></audio>
+
+    <script>
+        // CONFIG
+        const USER = "forpc1428-eng";
+        const REPO = "SONGS";
+        const API = `https://api.github.com/repos/${USER}/${REPO}/contents/`;
+
+        const audio = document.getElementById('player');
+        let songs = [];
+        let currentIdx = -1;
+
+        async function ignite() {
+            // Unlock audio for mobile
+            audio.play().then(() => audio.pause());
+            document.getElementById('portal').style.opacity = "0";
+            setTimeout(() => document.getElementById('portal').style.display = "none", 1000);
+            document.getElementById('app').style.opacity = "1";
+            load();
+        }
+
+        async function load() {
+            try {
+                const res = await fetch(API);
+                const data = await res.json();
+                
+                // FILTER: Only .mp3 files
+                songs = data
+                    .filter(item => item.name.toLowerCase().endsWith('.mp3'))
+                    .map(item => ({
+                        title: item.name.replace('.mp3', '').replace(/_/g, ' ').replace(/-/g, ' '),
+                        url: item.download_url
+                    }));
+                
+                render();
+            } catch (err) {
+                document.getElementById('list').innerHTML = `<p style="color:red">Failed to load: ${err}</p>`;
+            }
+        }
+
+        function render() {
+            document.getElementById('list').innerHTML = songs.map((s, i) => `
+                <div class="track ${i === currentIdx ? 'playing' : ''}" onclick="playSong(${i})">
+                    <div class="track-num">${(i+1).toString().padStart(2, '0')}</div>
+                    <div class="track-name">${s.title}</div>
+                </div>
+            `).join('');
+        }
+
+        function playSong(idx) {
+            currentIdx = idx;
+            const song = songs[idx];
+            document.getElementById('now-playing').innerText = song.title;
+            document.getElementById('playBtn').innerText = "⏸";
+            audio.src = song.url;
+            audio.play();
+            render();
+        }
+
+        function toggle() {
+            if (currentIdx === -1) { playSong(0); return; }
+            if (audio.paused) { audio.play(); document.getElementById('playBtn').innerText = "⏸"; }
+            else { audio.pause(); document.getElementById('playBtn').innerText = "▶"; }
+        }
+
+        function next() { playSong((currentIdx + 1) % songs.length); }
+        function prev() { playSong((currentIdx - 1 + songs.length) % songs.length); }
+
+        audio.ontimeupdate = () => {
+            const p = (audio.currentTime / audio.duration) * 100;
+            document.getElementById('fill').style.width = p + "%";
+        };
+        audio.onended = () => next();
+    </script>
 </body>
 </html>
