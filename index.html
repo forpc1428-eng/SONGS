@@ -3,88 +3,138 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>VEDANT'S OMNIVERSE | REFINED</title>
+    <title>VEDANT'S PLAYLIST</title>
     
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&family=Playfair+Display:ital,wght@0,400..900;1,400..900&family=Fraunces:opsz,wght@9..144,100..900&family=Bebas+Neue&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:slnt,wght@-10,100..900&family=Playfair+Display:ital,wght@0,400..900;1,400..900&family=Fraunces:ital,opsz,wght@0,9..144,100..900;1,9..144,100..900&family=Bebas+Neue&display=swap" rel="stylesheet">
     
     <style>
         :root { 
             --accent: #00f2ff; 
             --glass: rgba(255, 255, 255, 0.03); 
-            --border: rgba(255, 255, 255, 0.08);
-            --bg-color: #000;
+            --border: rgba(255, 255, 255, 0.08); 
         }
 
-        * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
-        body { background: var(--bg-color); color: #fff; height: 100vh; overflow: hidden; position: fixed; width: 100%; }
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', sans-serif; -webkit-tap-highlight-color: transparent; }
+        
+        body { 
+            background: #000; color: #fff; height: 100vh; overflow: hidden; 
+            position: fixed; width: 100%; 
+        }
 
-        /* --- 1. DOODLE PORTAL --- */
+        /* --- 1. THE DOODLE PORTAL --- */
         #portal {
             position: fixed; inset: 0; z-index: 10000; background: #fff;
             background-image: url('https://st3.depositphotos.com/1006597/15121/v/450/depositphotos_151212850-stock-illustration-doodle-monsters-seamless-pattern.jpg');
             background-size: 400px; display: flex; align-items: center; justify-content: center;
-            transition: clip-path 2s cubic-bezier(0.8, 0, 0.2, 1); clip-path: circle(150% at 50% 50%);
+            transition: clip-path 2.2s cubic-bezier(0.8, 0, 0.2, 1); 
+            clip-path: circle(150% at 50% 50%);
+            animation: doodleScroll 60s linear infinite;
         }
-        .portal-card { background: #fff; padding: 40px; border: 10px solid #000; box-shadow: 20px 20px 0 #000; transform: rotate(-3deg); text-align: center; cursor: pointer; }
+        @keyframes doodleScroll { from {background-position:0 0;} to {background-position:400px 400px;} }
+
+        .portal-card { 
+            background: #fff; padding: 50px; border: 12px solid #000; 
+            box-shadow: 30px 30px 0 #000; transform: rotate(-3deg); 
+            text-align: center; cursor: pointer; transition: 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+        .portal-card:active { transform: rotate(0deg) scale(0.9); }
+        .portal-card h1 { font-family: 'Bebas Neue'; font-size: 5rem; color: #000; line-height: 0.8; }
         .melt-exit { clip-path: circle(0% at 50% 50%) !important; }
 
-        /* --- 2. THE CHAMELEON ENVIRONMENT --- */
-        #env-canvas { position: fixed; inset: 0; z-index: -2; background: #000; transition: background 2s ease; }
-        .vignette { position: fixed; inset: 0; z-index: -1; background: radial-gradient(circle, transparent 20%, rgba(0,0,0,0.9) 100%); pointer-events: none; }
-        #orb { position: absolute; width: 100vw; height: 100vh; background: radial-gradient(circle, var(--accent), transparent 70%); border-radius: 50%; filter: blur(100px); opacity: 0.15; transform: translate(-50%, -50%); transition: 0.1s linear; pointer-events: none; }
-
-        /* --- 3. STABLE SHAPESHIFTER --- */
-        header { padding: 60px 30px 20px; height: 220px; display: flex; flex-direction: column; justify-content: flex-end; }
-        .header-container { position: relative; height: 120px; overflow: visible; }
-        #header-text {
-            position: absolute; bottom: 0; left: 0;
-            font-size: clamp(2.8rem, 10vw, 4rem); line-height: 0.85;
-            background: linear-gradient(to bottom, #fff, rgba(255,255,255,0.2));
-            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
-            transition: all 2.5s cubic-bezier(0.4, 0, 0.2, 1);
-            transform-origin: left bottom; white-space: nowrap;
+        /* --- 2. THE CHAMELEON REAL-TIME ENVIRONMENT --- */
+        .chameleon-bg { position: fixed; inset: 0; z-index: -2; background: #000; animation: colorShift 25s infinite alternate; }
+        @keyframes colorShift { 0% { filter: hue-rotate(0deg) brightness(0.4); } 100% { filter: hue-rotate(360deg) brightness(0.6); } }
+        
+        .vignette { 
+            position: fixed; inset: 0; z-index: -1; 
+            background: radial-gradient(circle at center, transparent 0%, rgba(0,0,0,0.4) 40%, rgba(0,0,0,1) 100%); 
+            pointer-events: none; 
         }
 
-        /* --- 4. FIXED SLIDE-TO-QUEUE CARDS --- */
-        .scroll-list { flex: 1; overflow-y: auto; padding: 0 20px 280px; scrollbar-width: none; }
+        .reactive-orb { 
+            position: absolute; width: 120vw; height: 120vh; 
+            background: radial-gradient(circle, var(--accent), transparent 70%); 
+            border-radius: 50%; filter: blur(120px); opacity: 0.15; 
+            transform: translate(-50%, -50%); transition: 0.1s linear; pointer-events: none;
+        }
+
+        /* --- 3. LIQUID-METAL SHAPESHIFTING HEADER --- */
+        header { padding: 70px 30px 30px; }
+        #header-text {
+            font-size: clamp(3rem, 12vw, 5rem); line-height: 0.8;
+            background: linear-gradient(180deg, #fff 0%, rgba(255,255,255,0.1) 100%);
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+            transition: all 3s cubic-bezier(0.4, 0, 0.2, 1);
+            will-change: font-variation-settings, font-weight, letter-spacing;
+        }
+
+        /* --- 4. OBSIDIAN TRACK CARDS (SPRING PHYSICS) --- */
+        .scroll-list { flex: 1; overflow-y: auto; padding: 0 20px 280px; scrollbar-width: none; perspective: 1000px; }
         .scroll-list::-webkit-scrollbar { display: none; }
 
-        .track-wrapper { position: relative; margin-bottom: 15px; overflow: hidden; border-radius: 30px; }
-        .queue-bg { position: absolute; inset: 0; background: var(--accent); display: flex; align-items: center; padding-left: 25px; font-weight: 900; color: #000; font-size: 0.7rem; opacity: 0; transition: opacity 0.2s; border-radius: 30px; }
+        .track-item { position: relative; margin-bottom: 18px; opacity: 0; transform: translateY(40px); }
+        .queue-hint { position: absolute; left: 30px; top: 50%; transform: translateY(-50%); color: var(--accent); font-weight: 900; font-size: 0.7rem; letter-spacing: 2px; opacity: 0; }
         
         .track-card {
-            background: var(--glass); border: 1px solid var(--border); border-radius: 30px;
-            padding: 25px; backdrop-filter: blur(40px); display: flex; align-items: center; gap: 20px;
-            position: relative; z-index: 2; transform: translateX(0);
+            background: var(--glass); border: 1px solid var(--border); border-radius: 35px;
+            padding: 28px; backdrop-filter: blur(50px); display: flex; align-items: center; gap: 20px;
+            transition: transform 0.1s linear, background 0.4s, box-shadow 0.4s; position: relative; z-index: 2;
         }
-        .track-card.active { background: #fff; color: #000; }
+        /* Obsidian Glint */
+        .track-card::after { 
+            content: ''; position: absolute; inset: 0; 
+            background: linear-gradient(115deg, transparent 40%, rgba(255,255,255,0.12) 50%, transparent 60%); 
+            transform: translateX(-100%); transition: 0.8s; 
+        }
+        .track-card:hover::after { transform: translateX(100%); }
+        .track-card.active { background: #fff; color: #000; box-shadow: 0 20px 60px rgba(0,242,255,0.2); }
 
-        /* --- 5. DOCK & SHUFFLE --- */
-        .dock { position: fixed; bottom: 25px; left: 15px; right: 15px; background: rgba(10,10,10,0.8); backdrop-filter: blur(50px); border: 1px solid var(--border); border-radius: 45px; padding: 25px; transform: translateY(150%); transition: 0.8s cubic-bezier(0.19, 1, 0.22, 1); z-index: 1000; }
+        /* --- 5. GHOST DOCK --- */
+        .dock {
+            position: fixed; bottom: 30px; left: 20px; right: 20px; 
+            background: rgba(10,10,10,0.75); backdrop-filter: blur(60px);
+            border: 1px solid var(--border); border-radius: 50px; padding: 30px;
+            transform: translateY(160%); transition: 1s cubic-bezier(0.19, 1, 0.22, 1); z-index: 1000;
+        }
         .dock.visible { transform: translateY(0); }
-        .rail { width: 100%; height: 6px; background: rgba(255,255,255,0.1); border-radius: 10px; margin-bottom: 20px; cursor: pointer; }
-        .fill { height: 100%; width: 0%; background: #fff; border-radius: 10px; }
-        
-        .btn-row { display: flex; align-items: center; gap: 20px; }
-        .shuffle-btn { font-size: 1.2rem; opacity: 0.4; cursor: pointer; transition: 0.3s; }
-        .shuffle-btn.on { opacity: 1; color: var(--accent); }
+        .rail { width: 100%; height: 6px; background: rgba(255,255,255,0.1); border-radius: 10px; margin-bottom: 25px; cursor: pointer; }
+        .fill { height: 100%; width: 0%; background: #fff; border-radius: 10px; box-shadow: 0 0 30px #fff; }
 
-        .container { display: flex; flex-direction: column; height: 100vh; opacity: 0; transition: 1.5s; }
+        .play-trigger { 
+            width: 70px; height: 70px; background: #fff; color: #000; border-radius: 50%; 
+            display: flex; align-items: center; justify-content: center; font-size: 1.5rem; 
+            cursor: pointer; transition: 0.3s; 
+        }
+        .play-trigger:active { transform: scale(0.9); }
+
+        .container { display: flex; flex-direction: column; height: 100vh; opacity: 0; transition: 2s; }
+        #toast { 
+            position: fixed; top: 40px; left: 50%; transform: translateX(-50%) translateY(-120px); 
+            background: #fff; color: #000; padding: 14px 35px; border-radius: 50px; 
+            font-weight: 900; font-size: 0.75rem; z-index: 11000; transition: 0.6s cubic-bezier(0.23, 1, 0.32, 1); 
+        }
+        #toast.show { transform: translateX(-50%) translateY(0); }
     </style>
 </head>
-<body onmousemove="handleGlobal(event)">
+<body onmousemove="handleGlobal(event)" ontouchmove="handleGlobal(event)">
+
+    <div id="toast">QUEUED</div>
 
     <div id="portal" onclick="ignite()">
-        <div class="portal-card"><h1>VEDANT</h1><p style="color:#000; font-weight:900; letter-spacing:4px; font-size:0.6rem;">RESTORE SYSTEM</p></div>
+        <div class="portal-card">
+            <h1>VEDANT</h1>
+            <p style="color:#000; font-weight:900; letter-spacing:6px; font-size:0.7rem; margin-top:10px;">ENTER THE OMNIVERSE</p>
+        </div>
     </div>
 
-    <div id="env-canvas"></div>
+    <div class="chameleon-bg"></div>
     <div class="vignette"></div>
-    <div id="orb"></div>
+    <div class="reactive-orb" id="orb"></div>
 
     <div class="container" id="app">
         <header>
-            <div class="header-container"><div id="header-text">VEDANT'S<br>PLAYLIST</div></div>
+            <p style="font-size: 0.6rem; letter-spacing: 10px; opacity: 0.5; margin-bottom: 15px; font-weight:800;">SOVEREIGN ENGINE v1000Q</p>
+            <div id="header-text">VEDANT'S<br>PLAYLIST</div>
         </header>
 
         <div class="scroll-list" id="list"></div>
@@ -92,14 +142,14 @@
         <div class="dock" id="dock">
             <div class="rail" onclick="seek(event)"><div class="fill" id="fill"></div></div>
             <div style="display:flex; align-items:center; justify-content:space-between;">
-                <div style="flex:1; overflow:hidden;">
-                    <p id="now-name" style="font-weight:900; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">STANDBY</p>
+                <div style="flex:1; overflow:hidden; margin-right:20px;">
+                    <p id="track-name" style="font-weight:900; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; font-size:1.3rem; letter-spacing:-1px;">INITIALIZING...</p>
+                    <p id="track-time" style="font-size:0.75rem; opacity:0.4; font-weight:800; margin-top:6px;">0:00 / 0:00</p>
                 </div>
-                <div class="btn-row">
-                    <div id="shuf-icon" class="shuffle-btn" onclick="toggleShuffle()">🔀</div>
-                    <div onclick="prev()" style="font-size:1.5rem">⏮</div>
-                    <div onclick="toggle()" id="play-btn" style="width:55px; height:55px; background:#fff; color:#000; border-radius:50%; display:flex; align-items:center; justify-content:center;">▶</div>
-                    <div onclick="next()" style="font-size:1.5rem">⏭</div>
+                <div style="display:flex; gap:35px; align-items:center;">
+                    <div onclick="prev()" style="font-size:1.8rem; cursor:pointer; opacity:0.7;">⏮</div>
+                    <div onclick="toggle()" id="play-btn" class="play-trigger">▶</div>
+                    <div onclick="next()" style="font-size:1.8rem; cursor:pointer; opacity:0.7;">⏭</div>
                 </div>
             </div>
         </div>
@@ -109,123 +159,140 @@
 
     <script>
         const audio = document.getElementById('player');
-        let songs = [], originalOrder = [], currentIdx = -1, queue = [], isShuffle = false;
-        let sx = 0, cx = 0, analyzer, dataArray;
+        let songs = [], currentIdx = -1, queue = [], analyzer, dataArray;
+        let startX = 0, currentX = 0;
 
-        // --- 1. BUTTERY FONTS (FIXED POSITION) ---
-        const fonts = [
-            { family: "'Playfair Display'", weight: "900", spacing: "-2px" },
-            { family: "'Inter'", weight: "100", spacing: "8px" },
-            { family: "'Fraunces'", weight: "900", spacing: "0px" },
-            { family: "'Bebas Neue'", weight: "400", spacing: "5px" }
+        // --- 1. BUTTERY SHAPESHIFTING LOGIC ---
+        const fontStates = [
+            { family: "'Playfair Display'", weight: "900", spacing: "-4px", style: "italic" },
+            { family: "'Inter'", weight: "100", spacing: "14px", style: "normal" },
+            { family: "'Fraunces'", weight: "900", spacing: "-1px", settings: "'SOFT' 100, 'WONK' 1" },
+            { family: "'Inter'", weight: "900", spacing: "-2px", style: "normal" },
+            { family: "'Fraunces'", weight: "200", spacing: "6px", settings: "'SOFT' 0, 'WONK' 0" }
         ];
-        let fIdx = 0;
-        setInterval(() => {
+        let stateIdx = 0;
+        function morph() {
             const h = document.getElementById('header-text');
-            const f = fonts[fIdx % fonts.length];
-            h.style.fontFamily = f.family;
-            h.style.fontWeight = f.weight;
-            h.style.letterSpacing = f.spacing;
-            fIdx++;
-        }, 4000);
-
-        // --- 2. CHAMELEON SYNC ---
-        const colors = ['#0f0c29', '#302b63', '#24243e', '#000428', '#1c3334'];
-        let cIdx = 0;
-        setInterval(() => {
-            document.getElementById('env-canvas').style.background = colors[cIdx % colors.length];
-            cIdx++;
-        }, 10000);
-
-        // --- 3. CORE ENGINE ---
-        function ignite() {
-            document.getElementById('portal').classList.add('melt-exit');
-            document.getElementById('app').style.opacity = "1";
-            const ctx = new (window.AudioContext || window.webkitAudioContext)();
-            const src = ctx.createMediaElementSource(audio);
-            analyzer = ctx.createAnalyser(); src.connect(analyzer); analyzer.connect(ctx.destination);
-            analyzer.fftSize = 32; dataArray = new Uint8Array(analyzer.frequencyBinCount);
-            pulse(); load();
+            const s = fontStates[stateIdx % fontStates.length];
+            h.style.fontFamily = s.family;
+            h.style.fontWeight = s.weight;
+            h.style.letterSpacing = s.spacing;
+            h.style.fontStyle = s.style || "normal";
+            if(s.settings) h.style.fontVariationSettings = s.settings;
+            stateIdx++;
         }
+        setInterval(morph, 5000);
 
-        function pulse() {
-            requestAnimationFrame(pulse);
-            if(analyzer) {
-                analyzer.getByteFrequencyData(dataArray);
-                const b = dataArray[2]/255;
-                document.getElementById('orb').style.transform = `translate(-50%, -50%) scale(${1 + b})`;
-                document.getElementById('orb').style.opacity = 0.1 + b;
+        // --- 2. GLOBAL REACTIVITY (ORB & DOCK) ---
+        function handleGlobal(e) {
+            const orb = document.getElementById('orb');
+            const x = e.clientX || (e.touches ? e.touches[0].clientX : 0);
+            const y = e.clientY || (e.touches ? e.touches[0].clientY : 0);
+            orb.style.left = x + 'px';
+            orb.style.top = y + 'px';
+
+            if (y > window.innerHeight * 0.8) document.getElementById('dock').classList.add('visible');
+            else if (!audio.paused) {
+                clearTimeout(window.dockHide);
+                window.dockHide = setTimeout(() => {
+                    if(y < window.innerHeight * 0.7) document.getElementById('dock').classList.remove('visible');
+                }, 4000);
             }
         }
 
-        async function load() {
+        // --- 3. AUDIO ANALYSIS (BASS PULSE) ---
+        function initAudioEngine() {
+            const ctx = new (window.AudioContext || window.webkitAudioContext)();
+            const src = ctx.createMediaElementSource(audio);
+            analyzer = ctx.createAnalyser();
+            src.connect(analyzer); analyzer.connect(ctx.destination);
+            analyzer.fftSize = 64;
+            dataArray = new Uint8Array(analyzer.frequencyBinCount);
+            tick();
+        }
+
+        function tick() {
+            requestAnimationFrame(tick);
+            if (!analyzer) return;
+            analyzer.getByteFrequencyData(dataArray);
+            const bass = dataArray[2] / 255;
+            document.getElementById('orb').style.transform = `translate(-50%, -50%) scale(${1 + bass * 1.2})`;
+            document.getElementById('orb').style.opacity = 0.15 + (bass * 0.5);
+        }
+
+        // --- 4. CORE FUNCTIONALITY ---
+        function ignite() {
+            document.getElementById('portal').classList.add('melt-exit');
+            document.getElementById('app').style.opacity = "1";
+            initAudioEngine();
+            morph(); // Trigger first font
+            loadSongs();
+        }
+
+        async function loadSongs() {
             const res = await fetch(`https://api.github.com/repos/forpc1428-eng/SONGS/contents/`);
             const data = await res.json();
             songs = data.filter(f => f.name.endsWith('.mp3')).map(f => ({
                 name: f.name.replace('.mp3', '').replace(/_/g, ' '),
                 url: `https://media.githubusercontent.com/media/forpc1428-eng/SONGS/main/${encodeURIComponent(f.name)}`
             }));
-            originalOrder = [...songs];
-            render();
+            renderList();
         }
 
-        function render() {
+        function renderList() {
             const list = document.getElementById('list');
             list.innerHTML = songs.map((s, i) => `
-                <div class="track-wrapper">
-                    <div class="queue-bg" id="qbg-${i}">UP NEXT</div>
-                    <div class="track-card ${songs[i].url === (songs[currentIdx]||{}).url ? 'active' : ''}" id="card-${i}" 
+                <div class="track-item" style="transition-delay: ${i * 0.05}s; opacity: 1; transform: translateY(0)">
+                    <div class="queue-hint" id="hint-${i}">ADD NEXT</div>
+                    <div class="track-card ${i === currentIdx ? 'active' : ''}" id="card-${i}" 
                          onclick="playSong(${i})" ontouchstart="ts(event,${i})" ontouchmove="tm(event,${i})" ontouchend="te(event,${i})">
+                        <p style="font-weight:200; opacity:0.3; font-size:0.8rem;">${(i+1).toString().padStart(2,'0')}</p>
                         <p style="font-weight:900; flex:1; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">${s.name}</p>
                     </div>
                 </div>
             `).join('');
         }
 
-        // --- 4. GESTURE ENGINE (FIXED) ---
-        function ts(e, i) { sx = e.touches[0].clientX; document.getElementById(`card-${i}`).style.transition = "none"; }
+        // --- 5. SPRING GESTURE SYSTEM ---
+        function ts(e, i) { startX = e.touches[0].clientX; }
         function tm(e, i) { 
-            cx = e.touches[0].clientX - sx; 
-            if(cx > 0 && cx < 150) {
-                document.getElementById(`card-${i}`).style.transform = `translateX(${cx}px)`;
-                document.getElementById(`qbg-${i}`).style.opacity = cx/100;
+            currentX = e.touches[0].clientX - startX; 
+            if(currentX > 0 && currentX < 140) {
+                document.getElementById(`card-${i}`).style.transform = `translateX(${currentX}px)`;
+                document.getElementById(`hint-${i}`).style.opacity = currentX / 100;
             }
         }
         function te(e, i) {
             const card = document.getElementById(`card-${i}`);
-            card.style.transition = "transform 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275)";
-            if(cx > 100) {
+            if(currentX > 90) {
                 queue.push(songs[i]);
-                alert("Queued: " + songs[i].name);
+                const t = document.getElementById('toast');
+                t.innerText = "NEXT UP: " + songs[i].name;
+                t.classList.add('show');
+                setTimeout(()=>t.classList.remove('show'), 2500);
             }
+            card.style.transition = "transform 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275)"; // Spring snap
             card.style.transform = `translateX(0)`;
-            document.getElementById(`qbg-${i}`).style.opacity = 0;
-            cx = 0;
+            document.getElementById(`hint-${i}`).style.opacity = 0;
+            setTimeout(() => card.style.transition = "transform 0.1s linear", 500);
+            currentX = 0;
         }
 
         function playSong(i) {
             currentIdx = i;
             audio.src = songs[i].url;
             audio.play();
-            document.getElementById('now-name').innerText = songs[i].name;
+            document.getElementById('track-name').innerText = songs[i].name;
             document.getElementById('play-btn').innerText = "⏸";
             document.getElementById('dock').classList.add('visible');
-            render();
+            renderList();
         }
 
-        function toggleShuffle() {
-            isShuffle = !isShuffle;
-            document.getElementById('shuf-icon').classList.toggle('on');
-            if(isShuffle) {
-                for (let i = songs.length - 1; i > 0; i--) {
-                    const j = Math.floor(Math.random() * (i + 1));
-                    [songs[i], songs[j]] = [songs[j], songs[i]];
-                }
-            } else { songs = [...originalOrder]; }
-            render();
+        function toggle() { 
+            if(audio.paused) { audio.play(); document.getElementById('play-btn').innerText = "⏸"; }
+            else { audio.pause(); document.getElementById('play-btn').innerText = "▶"; }
         }
 
-        function toggle() { audio.paused ? audio.play() : audio.pause(); document.getElementById('play-btn').innerText = audio.paused ? "▶" : "⏸"; }
         function next() {
             if(queue.length > 0) {
                 const s = queue.shift();
@@ -234,19 +301,18 @@
             } else if(currentIdx < songs.length - 1) playSong(currentIdx + 1);
         }
         function prev() { if(currentIdx > 0) playSong(currentIdx - 1); }
+        
         function seek(e) { 
             const rect = document.querySelector('.rail').getBoundingClientRect();
             audio.currentTime = ((e.clientX - rect.left) / rect.width) * audio.duration; 
         }
-        function handleGlobal(e) {
-            const y = e.clientY || (e.touches ? e.touches[0].clientY : 0);
-            const x = e.clientX || (e.touches ? e.touches[0].clientX : 0);
-            document.getElementById('orb').style.left = x + 'px';
-            document.getElementById('orb').style.top = y + 'px';
-            if (y > window.innerHeight * 0.8) document.getElementById('dock').classList.add('visible');
-        }
 
-        audio.ontimeupdate = () => { document.getElementById('fill').style.width = (audio.currentTime / audio.duration) * 100 + "%"; };
+        audio.ontimeupdate = () => {
+            const p = (audio.currentTime / audio.duration) * 100;
+            document.getElementById('fill').style.width = p + "%";
+            document.getElementById('track-time').innerText = `${fmt(audio.currentTime)} / ${fmt(audio.duration || 0)}`;
+        };
+        const fmt = (s) => `${Math.floor(s/60)}:${Math.floor(s%60).toString().padStart(2,'0')}`;
         audio.onended = () => next();
     </script>
 </body>
