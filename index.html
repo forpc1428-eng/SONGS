@@ -3,139 +3,114 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>VEDANT'S PLAYLIST | DOODLE EDITION</title>
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@800&family=Playfair+Display:ital,wght@1,900&family=Bebas+Neue&family=Montserrat:wght@900&family=Space+Mono:ital,wght@1,700&display=swap" rel="stylesheet">
+    <title>VEDANT'S PLAYLIST | OMNIVERSE</title>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@200;800&family=Playfair+Display:ital,wght@1,900&display=swap" rel="stylesheet">
     <style>
-        :root { --accent: #00f2ff; --glass: rgba(255, 255, 255, 0.05); }
+        :root { --accent: #00f2ff; --glass: rgba(255, 255, 255, 0.03); }
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Plus Jakarta Sans', sans-serif; -webkit-tap-highlight-color: transparent; }
-        
         body { background: #000; color: #fff; height: 100vh; overflow: hidden; position: fixed; width: 100%; }
 
-        /* --- STAGE 1: DOODLE LANDING --- */
+        /* --- 1. THE DOODLE PORTAL (LANDING) --- */
         #portal {
-            position: fixed; inset: 0; z-index: 10000;
-            background-color: #fff;
-            /* Using your attached style as a repeating background */
+            position: fixed; inset: 0; z-index: 10000; background: #fff;
             background-image: url('https://st3.depositphotos.com/1006597/15121/v/450/depositphotos_151212850-stock-illustration-doodle-monsters-seamless-pattern.jpg');
-            background-size: 500px;
-            display: flex; flex-direction: column; align-items: center; justify-content: center;
-            transition: clip-path 1.8s cubic-bezier(0.77, 0, 0.175, 1);
+            background-size: 400px; display: flex; align-items: center; justify-content: center;
+            transition: clip-path 2s cubic-bezier(0.8, 0, 0.2, 1);
             clip-path: circle(150% at 50% 50%);
-            animation: doodleScroll 60s linear infinite;
         }
-
-        @keyframes doodleScroll {
-            from { background-position: 0 0; }
-            to { background-position: 500px 500px; }
-        }
-
-        .portal-content {
-            background: #fff; padding: 40px; border: 8px solid #000;
-            text-align: center; box-shadow: 20px 20px 0px #000;
-            transform: rotate(-2deg); cursor: pointer;
-        }
-
-        .portal-content h2 { color: #000; font-family: 'Bebas Neue'; font-size: 3rem; letter-spacing: 5px; }
-
+        .portal-box { background: #fff; padding: 40px; border: 10px solid #000; box-shadow: 25px 25px 0 #000; transform: rotate(-3deg); cursor: pointer; transition: 0.3s; }
+        .portal-box:active { transform: rotate(0deg) scale(0.9); }
         .melt-exit { clip-path: circle(0% at 50% 50%) !important; }
 
-        /* --- STAGE 2: CHAMELEON ENVIRONMENT --- */
-        .chameleon-bg {
-            position: fixed; inset: 0; z-index: -2;
-            background: linear-gradient(45deg, #0f0c29, #302b63, #24243e);
-            animation: colorShift 15s infinite alternate;
-        }
-        @keyframes colorShift {
-            0% { filter: hue-rotate(0deg) brightness(0.4); }
-            50% { filter: hue-rotate(180deg) brightness(0.6); }
-            100% { filter: hue-rotate(360deg) brightness(0.4); }
-        }
-        .vignette {
-            position: fixed; inset: 0; z-index: -1;
-            background: radial-gradient(circle, transparent 20%, rgba(0,0,0,0.9) 100%);
-            pointer-events: none;
-        }
+        /* --- 2. THE CHAMELEON REAL-TIME ENVIRONMENT --- */
+        .chameleon-env { position: fixed; inset: 0; z-index: -2; background: #000; overflow: hidden; }
+        .glow-orb { position: absolute; width: 120vw; height: 100vh; border-radius: 50%; filter: blur(150px); opacity: 0.3; transition: 1s ease; }
+        .vignette { position: fixed; inset: 0; z-index: -1; background: radial-gradient(circle, transparent 10%, rgba(0,0,0,0.95) 100%); pointer-events: none; }
 
-        /* --- SHAPESHIFTING HEADER --- */
-        header { padding: 60px 30px 20px; position: relative; z-index: 100; }
-
+        /* --- 3. FLUID VARIABLE TYPOGRAPHY --- */
+        header { padding: 60px 30px 20px; z-index: 100; }
         .shapeshifter {
-            font-size: clamp(2.5rem, 8vw, 3.5rem); line-height: 0.85;
-            background: linear-gradient(to bottom, #fff, rgba(255,255,255,0.3));
+            font-size: clamp(2.8rem, 10vw, 4rem); line-height: 0.8;
+            background: linear-gradient(180deg, #fff, rgba(255,255,255,0.2));
             -webkit-background-clip: text; -webkit-text-fill-color: transparent;
-            animation: fontCycle 12s infinite;
+            transition: font-weight 0.8s, font-variation-settings 0.8s, letter-spacing 0.8s;
+            will-change: font-weight, letter-spacing;
         }
 
-        @keyframes fontCycle {
-            0%, 20% { font-family: 'Playfair Display'; font-style: italic; letter-spacing: -2px; }
-            21%, 40% { font-family: 'Bebas Neue'; letter-spacing: 5px; font-weight: 400; }
-            41%, 60% { font-family: 'Space Mono'; font-style: italic; letter-spacing: -1px; }
-            61%, 80% { font-family: 'Montserrat'; letter-spacing: -3px; font-weight: 900; }
-            81%, 100% { font-family: 'Plus Jakarta Sans'; letter-spacing: 0px; font-weight: 800; }
-        }
-
-        /* --- UI ENGINE --- */
-        .container { display: flex; flex-direction: column; height: 100vh; opacity: 0; transition: 1.5s; }
-        .scroll-area { flex: 1; overflow-y: auto; padding: 0 20px 240px; scrollbar-width: none; }
+        /* --- 4. OBSIDIAN SPRING CARDS --- */
+        .scroll-area { flex: 1; overflow-y: auto; padding: 0 20px 260px; scrollbar-width: none; }
         .scroll-area::-webkit-scrollbar { display: none; }
 
         .track-card {
-            background: var(--glass); border: 1px solid rgba(255,255,255,0.1);
-            border-radius: 24px; padding: 22px; margin-bottom: 12px;
-            backdrop-filter: blur(25px); transition: 0.3s;
-            display: flex; align-items: center; gap: 15px; cursor: pointer;
+            background: var(--glass); border: 1px solid rgba(255,255,255,0.08);
+            border-radius: 30px; padding: 25px; margin-bottom: 15px;
+            backdrop-filter: blur(40px); transition: transform 0.1s linear;
+            position: relative; overflow: hidden; display: flex; align-items: center; gap: 20px;
         }
-        .track-card.active { background: #fff; color: #000; transform: scale(0.97); box-shadow: 0 10px 40px rgba(0,242,255,0.3); }
+        /* Specular Glint */
+        .track-card::after {
+            content: ''; position: absolute; inset: 0;
+            background: linear-gradient(125deg, transparent 40%, rgba(255,255,255,0.15) 50%, transparent 60%);
+            transform: translateX(-100%); transition: 0.5s;
+        }
+        .track-card:hover::after { transform: translateX(100%); }
+        .track-card.active { background: #fff; color: #000; }
 
-        /* --- DOCK --- */
+        /* --- 5. GHOST DOCK (AUTOHIDE) --- */
         .dock {
-            position: fixed; bottom: 25px; left: 15px; right: 15px;
-            background: rgba(10, 10, 10, 0.8); backdrop-filter: blur(50px);
-            border: 1px solid rgba(255,255,255,0.1); border-radius: 40px;
-            padding: 25px; z-index: 1000;
+            position: fixed; bottom: 30px; left: 20px; right: 20px;
+            background: rgba(10,10,10,0.6); backdrop-filter: blur(60px);
+            border: 1px solid rgba(255,255,255,0.1); border-radius: 45px;
+            padding: 30px; z-index: 1000;
+            transform: translateY(150px); transition: 0.8s cubic-bezier(0.19, 1, 0.22, 1);
         }
-        .bar { width: 100%; height: 6px; background: rgba(255,255,255,0.1); border-radius: 10px; margin-bottom: 15px; cursor: pointer; }
-        .fill { height: 100%; width: 0%; background: #fff; border-radius: 10px; box-shadow: 0 0 20px #fff; transition: width 0.1s linear; }
-        .controls { display: flex; align-items: center; justify-content: space-between; }
-        .play-btn { width: 55px; height: 55px; background: #fff; color: #000; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.2rem; }
+        .dock.visible { transform: translateY(0); }
+
+        .rail { width: 100%; height: 6px; background: rgba(255,255,255,0.1); border-radius: 10px; margin-bottom: 20px; cursor: pointer; }
+        .fill { height: 100%; width: 0%; background: #fff; border-radius: 10px; box-shadow: 0 0 25px #fff; }
         
-        .q-toast { position: fixed; top: 20px; left: 50%; transform: translateX(-50%) translateY(-100px); background: #fff; color: #000; padding: 12px 25px; border-radius: 50px; font-weight: 800; font-size: 0.75rem; z-index: 11000; transition: 0.5s; }
-        .q-toast.show { transform: translateX(-50%) translateY(0); }
+        .play-trigger { width: 65px; height: 65px; background: #fff; color: #000; border-radius: 50%; display: flex; align-items: center; justify-content: center; box-shadow: 0 10px 30px rgba(255,255,255,0.2); }
+
+        .container { display: flex; flex-direction: column; height: 100vh; opacity: 0; transition: 2s; }
+        #toast { position: fixed; top: 30px; left: 50%; transform: translateX(-50%) translateY(-100px); background: #fff; color: #000; padding: 12px 30px; border-radius: 50px; font-weight: 800; font-size: 0.8rem; z-index: 11000; transition: 0.6s cubic-bezier(0.23, 1, 0.32, 1); }
+        #toast.active { transform: translateX(-50%) translateY(0); }
     </style>
 </head>
-<body>
+<body onmousemove="showDock(event)" ontouchstart="showDock(event)">
 
-    <div id="q-toast" class="q-toast">QUEUED</div>
+    <div id="toast">ADDED TO QUEUE</div>
 
     <div id="portal" onclick="ignite()">
-        <div class="portal-content">
-            <h2>ENTER THE CORE</h2>
-            <p style="color:#000; font-weight:900; font-size:0.7rem;">VEDANT'S PLAYLIST</p>
+        <div class="portal-box">
+            <h1 style="font-family:'Bebas Neue'; font-size:4rem; color:#000;">VEDANT</h1>
+            <p style="color:#000; font-weight:900; letter-spacing:3px;">INITIALIZE CORE</p>
         </div>
     </div>
 
-    <div class="chameleon-bg"></div>
+    <div class="chameleon-env">
+        <div class="glow-orb" id="orb" style="background: #7000ff; top: -20%; left: -20%;"></div>
+    </div>
     <div class="vignette"></div>
 
     <div class="container" id="app">
         <header>
-            <p style="font-size: 0.6rem; letter-spacing: 6px; opacity: 0.5; margin-bottom: 10px;">ADAPTIVE SYSTEM v4.0</p>
-            <div class="shapeshifter">VEDANT'S<br>PLAYLIST</div>
+            <p style="font-size: 0.6rem; letter-spacing: 8px; opacity: 0.4; margin-bottom: 15px;">PREDICTIVE ENGINE V5.0</p>
+            <div class="shapeshifter" id="header-text">VEDANT'S<br>PLAYLIST</div>
         </header>
 
         <div class="scroll-area" id="list"></div>
 
-        <div class="dock">
-            <div class="bar" onclick="seek(event)"><div class="fill" id="fill"></div></div>
-            <div class="controls">
-                <div style="flex:1; overflow:hidden; margin-right:15px;">
-                    <p id="song-name" style="font-weight:800; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; font-size:1.1rem;">INITIALIZING...</p>
-                    <p id="time" style="font-size:0.7rem; opacity:0.5; font-weight:800; margin-top:4px;">0:00 / 0:00</p>
+        <div class="dock" id="dock">
+            <div class="rail" onclick="seek(event)"><div class="fill" id="fill"></div></div>
+            <div style="display:flex; align-items:center; justify-content:space-between;">
+                <div style="flex:1; overflow:hidden;">
+                    <p id="cur-name" style="font-weight:800; font-size:1.2rem; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">READY</p>
+                    <p id="cur-time" style="font-size:0.7rem; opacity:0.4; font-weight:800; margin-top:5px;">0:00 / 0:00</p>
                 </div>
-                <div style="display:flex; gap:25px; align-items:center;">
-                    <div onclick="prev()" style="font-size:1.5rem">⏮</div>
-                    <div class="play-btn" onclick="toggle()" id="play-btn">▶</div>
-                    <div onclick="next()" style="font-size:1.5rem">⏭</div>
+                <div style="display:flex; gap:30px; align-items:center;">
+                    <div onclick="prev()" style="font-size:1.8rem; cursor:pointer;">⏮</div>
+                    <div class="play-trigger" onclick="toggle()" id="play-btn">▶</div>
+                    <div onclick="next()" style="font-size:1.8rem; cursor:pointer;">⏭</div>
                 </div>
             </div>
         </div>
@@ -144,23 +119,71 @@
     <audio id="player" crossorigin="anonymous"></audio>
 
     <script>
-        const USER = "forpc1428-eng", REPO = "SONGS";
-        const API = `https://api.github.com/repos/${USER}/${REPO}/contents/`;
         const audio = document.getElementById('player');
         let songs = [], currentIdx = -1, queue = [];
+        let analyzer, dataArray;
 
+        // 1. QUADRILLION TYPOGRAPHY ANIMATOR
+        const fonts = [
+            { weight: 200, spacing: '15px' },
+            { weight: 800, spacing: '-2px' },
+            { weight: 500, spacing: '5px' }
+        ];
+        let fontStep = 0;
+        setInterval(() => {
+            const h = document.getElementById('header-text');
+            const f = fonts[fontStep % fonts.length];
+            h.style.fontWeight = f.weight;
+            h.style.letterSpacing = f.spacing;
+            fontStep++;
+        }, 3000);
+
+        // 2. GHOST DOCK LOGIC
+        let dockTimer;
+        function showDock() {
+            const d = document.getElementById('dock');
+            d.classList.add('visible');
+            clearTimeout(dockTimer);
+            dockTimer = setTimeout(() => d.classList.remove('visible'), 5000);
+        }
+
+        // 3. AUDIO ANALYZER (ENVIRONMENTAL PULSE)
+        function initAnalyzer() {
+            const ctx = new (window.AudioContext || window.webkitAudioContext)();
+            const src = ctx.createMediaElementSource(audio);
+            analyzer = ctx.createAnalyser();
+            src.connect(analyzer);
+            analyzer.connect(ctx.destination);
+            analyzer.fftSize = 64;
+            dataArray = new Uint8Array(analyzer.frequencyBinCount);
+            renderPulse();
+        }
+
+        function renderPulse() {
+            requestAnimationFrame(renderPulse);
+            if (!analyzer) return;
+            analyzer.getByteFrequencyData(dataArray);
+            const bass = dataArray[2]; // Low freq
+            const intensity = bass / 255;
+            document.getElementById('orb').style.transform = `scale(${1 + intensity * 0.5})`;
+            document.getElementById('orb').style.opacity = 0.2 + (intensity * 0.4);
+            document.querySelector('.vignette').style.opacity = 1 - (intensity * 0.3);
+        }
+
+        // 4. CORE ENGINE
         function ignite() {
             document.getElementById('portal').classList.add('melt-exit');
             document.getElementById('app').style.opacity = "1";
+            initAnalyzer();
             load();
         }
 
         async function load() {
-            const res = await fetch(API);
+            const res = await fetch(`https://api.github.com/repos/forpc1428-eng/SONGS/contents/`);
             const data = await res.json();
             songs = data.filter(f => f.name.endsWith('.mp3')).map(f => ({
                 name: f.name.replace('.mp3', '').replace(/_/g, ' '),
-                url: `https://media.githubusercontent.com/media/${USER}/${REPO}/main/${encodeURIComponent(f.name)}`
+                url: `https://media.githubusercontent.com/media/forpc1428-eng/SONGS/main/${encodeURIComponent(f.name)}`
             }));
             render();
         }
@@ -168,32 +191,28 @@
         function render() {
             const list = document.getElementById('list');
             list.innerHTML = songs.map((s, i) => `
-                <div class="track-card ${i === currentIdx ? 'active' : ''}" 
-                     onclick="playSong(${i})" 
-                     ontouchstart="ts(event, ${i})" 
-                     ontouchmove="tm(event, ${i})" 
-                     ontouchend="te(event, ${i})" 
-                     id="card-${i}">
-                    <div style="font-weight:900; opacity:0.3; font-size:0.75rem;">${(i+1).toString().padStart(2,'0')}</div>
-                    <p style="font-weight:800; font-size:0.95rem; flex:1; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">${s.name}</p>
+                <div class="track-card ${i === currentIdx ? 'active' : ''}" id="card-${i}"
+                     onclick="playSong(${i})" ontouchstart="ts(event,${i})" ontouchmove="tm(event,${i})" ontouchend="te(event,${i})">
+                    <div style="font-weight:200; opacity:0.3; font-size:0.8rem;">${(i+1).toString().padStart(2,'0')}</div>
+                    <p style="font-weight:800; flex:1; overflow:hidden; text-overflow:ellipsis;">${s.name}</p>
                 </div>
             `).join('');
         }
 
-        // --- GESTURE SYSTEM ---
+        // --- SPRING PHYSICS GESTURES ---
         let sx = 0, cx = 0;
         function ts(e, i) { sx = e.touches[0].clientX; }
         function tm(e, i) { 
             cx = e.touches[0].clientX - sx; 
-            if(cx > 0 && cx < 120) document.getElementById(`card-${i}`).style.transform = `translateX(${cx}px)`;
+            if(cx > 0 && cx < 150) document.getElementById(`card-${i}`).style.transform = `translateX(${cx}px)`;
         }
         function te(e, i) {
-            if(cx > 80) {
+            if(cx > 90) {
                 queue.push(songs[i]);
-                const toast = document.getElementById('q-toast');
-                toast.innerText = "UP NEXT: " + songs[i].name;
-                toast.classList.add('show');
-                setTimeout(()=>toast.classList.remove('show'), 2000);
+                const t = document.getElementById('toast');
+                t.innerText = "QUEUED: " + songs[i].name;
+                t.classList.add('active');
+                setTimeout(()=>t.classList.remove('active'), 2500);
             }
             document.getElementById(`card-${i}`).style.transform = `translateX(0)`;
             cx = 0;
@@ -203,29 +222,29 @@
             currentIdx = i;
             audio.src = songs[i].url;
             audio.play();
-            document.getElementById('song-name').innerText = songs[i].name;
+            document.getElementById('cur-name').innerText = songs[i].name;
             document.getElementById('play-btn').innerText = "⏸";
             render();
         }
 
-        function toggle() { audio.paused ? (audio.play(), document.getElementById('play-btn').innerText="⏸") : (audio.pause(), document.getElementById('play-btn').innerText="▶"); }
+        function toggle() { audio.paused ? audio.play() : audio.pause(); document.getElementById('play-btn').innerText = audio.paused ? "▶" : "⏸"; }
         function next() {
             if(queue.length > 0) {
                 const s = queue.shift();
                 currentIdx = songs.findIndex(x => x.url === s.url);
                 playSong(currentIdx);
-            } else if(currentIdx < songs.length -1) playSong(currentIdx+1);
+            } else if(currentIdx < songs.length - 1) playSong(currentIdx + 1);
         }
-        function prev() { if(currentIdx > 0) playSong(currentIdx-1); }
+        function prev() { if(currentIdx > 0) playSong(currentIdx - 1); }
         function seek(e) { 
-            const rect = document.querySelector('.bar').getBoundingClientRect();
+            const rect = document.querySelector('.rail').getBoundingClientRect();
             audio.currentTime = ((e.clientX - rect.left) / rect.width) * audio.duration; 
         }
 
         audio.ontimeupdate = () => {
             const p = (audio.currentTime / audio.duration) * 100;
             document.getElementById('fill').style.width = p + "%";
-            document.getElementById('time').innerText = `${fmt(audio.currentTime)} / ${fmt(audio.duration || 0)}`;
+            document.getElementById('cur-time').innerText = `${fmt(audio.currentTime)} / ${fmt(audio.duration || 0)}`;
         };
         const fmt = (s) => `${Math.floor(s/60)}:${Math.floor(s%60).toString().padStart(2,'0')}`;
         audio.onended = () => next();
