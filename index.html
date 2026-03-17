@@ -3,74 +3,138 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>V-CORE ULTIMATE</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&family=Playfair+Display:wght@900&display=swap" rel="stylesheet">
+    <title>V-CORE INFINITY</title>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;800&family=Playfair+Display:wght@900&display=swap" rel="stylesheet">
     <style>
-        :root { --accent: #fff; --glass: rgba(255,255,255,0.03); --border: rgba(255,255,255,0.08); --bg: #000; }
-        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', sans-serif; -webkit-tap-highlight-color: transparent; }
-        body { background: var(--bg); color: #fff; height: 100vh; overflow: hidden; position: fixed; width: 100%; }
+        :root { 
+            --glass: rgba(255, 255, 255, 0.08); 
+            --border: rgba(255, 255, 255, 0.12);
+            --accent: #ffffff;
+        }
 
-        /* Cinematic Entrance */
-        #portal { position: fixed; inset: 0; z-index: 1000; background: #000; display: flex; flex-direction: column; align-items: center; justify-content: center; transition: 1s cubic-bezier(0.19, 1, 0.22, 1); }
-        .v-orb { width: 100px; height: 100px; border: 1px solid #fff; border-radius: 50%; display: flex; align-items: center; justify-content: center; box-shadow: 0 0 50px rgba(255,255,255,0.1); cursor: pointer; }
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Plus Jakarta Sans', sans-serif; -webkit-tap-highlight-color: transparent; }
+
+        /* Animated Mesh Background */
+        body { 
+            background: #000; 
+            color: #fff; 
+            height: 100vh; 
+            overflow: hidden; 
+            position: fixed; 
+            width: 100%; 
+        }
+
+        .bg-mesh {
+            position: fixed; inset: 0; z-index: -1;
+            background: radial-gradient(circle at 0% 0%, #1a1a2e 0%, transparent 50%),
+                        radial-gradient(circle at 100% 100%, #2e1a1a 0%, transparent 50%),
+                        radial-gradient(circle at 50% 50%, #121212 0%, #000 100%);
+            filter: blur(80px);
+            animation: meshMove 20s infinite alternate;
+        }
+
+        @keyframes meshMove {
+            0% { transform: scale(1); }
+            100% { transform: scale(1.2) rotate(5deg); }
+        }
+
+        /* Entrance Portal */
+        #portal { 
+            position: fixed; inset: 0; z-index: 1000; background: #000; 
+            display: flex; flex-direction: column; align-items: center; justify-content: center; 
+            transition: 1s cubic-bezier(0.19, 1, 0.22, 1); 
+        }
+        .v-orb { 
+            width: 100px; height: 100px; border: 1px solid #fff; border-radius: 50%; 
+            display: flex; align-items: center; justify-content: center; 
+            box-shadow: 0 0 50px rgba(255,255,255,0.1); cursor: pointer; 
+            animation: float 3s ease-in-out infinite;
+        }
+        @keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
         .v-orb span { font-family: 'Playfair Display'; font-size: 2.5rem; }
 
-        /* Header & Search */
-        .container { display: flex; flex-direction: column; height: 100vh; padding-top: env(safe-area-inset-top); }
-        header { padding: 40px 25px 10px; }
-        header h1 { font-family: 'Playfair Display'; font-size: 3rem; margin-bottom: 10px; }
-        .search-box { width: 100%; padding: 15px 20px; background: var(--glass); border: 1px solid var(--border); border-radius: 15px; color: #fff; margin-bottom: 20px; outline: none; transition: 0.3s; }
-        .search-box:focus { border-color: #fff; background: rgba(255,255,255,0.08); }
+        /* UI Layout */
+        .container { display: flex; flex-direction: column; height: 100vh; padding-top: env(safe-area-inset-top); position: relative; z-index: 1; }
+        
+        header { padding: 40px 25px 20px; }
+        header h1 { font-family: 'Playfair Display'; font-size: 2.8rem; letter-spacing: -2px; margin-bottom: 15px; }
 
-        /* List Area */
-        .list { flex: 1; overflow-y: auto; padding: 0 20px 200px; scrollbar-width: none; }
+        .search-container { position: sticky; top: 0; background: transparent; padding: 0 20px 10px; z-index: 10; }
+        .search-box { 
+            width: 100%; padding: 14px 20px; 
+            background: var(--glass); border: 1px solid var(--border); 
+            border-radius: 16px; color: #fff; backdrop-filter: blur(10px);
+            outline: none; transition: 0.3s;
+        }
+
+        /* The List */
+        .list { flex: 1; overflow-y: auto; padding: 0 20px 220px; scrollbar-width: none; mask-image: linear-gradient(to bottom, transparent, black 5%, black 90%, transparent); }
         .list::-webkit-scrollbar { display: none; }
         
-        .track { display: flex; align-items: center; padding: 18px; background: var(--glass); border-radius: 20px; margin-bottom: 10px; border: 1px solid var(--border); transition: 0.2s; position: relative; overflow: hidden; }
-        .track.active { background: #fff; color: #000; border-color: #fff; box-shadow: 0 10px 30px rgba(255,255,255,0.1); }
-        .track-num { font-weight: 900; font-size: 0.7rem; width: 30px; opacity: 0.4; }
+        .track { 
+            display: flex; align-items: center; padding: 16px; 
+            background: var(--glass); border-radius: 20px; 
+            margin-bottom: 10px; border: 1px solid var(--border); 
+            transition: 0.3s; backdrop-filter: blur(5px);
+        }
+        .track.active { background: #fff; color: #000; border-color: #fff; transform: scale(0.98); }
+        .track-num { font-weight: 800; font-size: 0.7rem; width: 35px; opacity: 0.4; }
         .track-info { flex: 1; overflow: hidden; }
-        .track-name { font-weight: 700; font-size: 0.95rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-        
-        /* Premium Dock */
-        .dock { position: fixed; bottom: 0; width: 100%; background: rgba(5,5,5,0.8); backdrop-filter: blur(30px); border-top: 1px solid var(--border); padding: 20px 25px calc(30px + env(safe-area-inset-bottom)); z-index: 500; }
-        .prog-container { position: absolute; top: 0; left: 0; width: 100%; height: 3px; background: rgba(255,255,255,0.05); cursor: pointer; }
-        .prog-fill { height: 100%; background: #fff; width: 0%; box-shadow: 0 0 15px #fff; }
-        
-        .dock-main { display: flex; align-items: center; justify-content: space-between; }
-        .now-playing-meta { flex: 1; margin-right: 20px; overflow: hidden; }
-        #cur-title { font-family: 'Playfair Display'; font-size: 1.1rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-        
-        .controls { display: flex; align-items: center; gap: 25px; }
-        .c-btn { font-size: 1.4rem; cursor: pointer; opacity: 0.7; transition: 0.2s; }
-        .c-btn:active { transform: scale(0.8); }
-        .play-main { width: 55px; height: 55px; background: #fff; color: #000; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.2rem; }
+        .track-name { font-weight: 700; font-size: 0.9rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 
-        /* Mobile Pulse Effect */
-        @keyframes pulse { 0% { opacity: 0.5; } 50% { opacity: 1; } 100% { opacity: 0.5; } }
-        .playing .track-num { animation: pulse 1s infinite; color: #000; }
+        /* God-Tier Dock */
+        .dock { 
+            position: fixed; bottom: 15px; left: 15px; right: 15px; 
+            background: rgba(255, 255, 255, 0.05); backdrop-filter: blur(25px); 
+            border: 1px solid var(--border); border-radius: 30px;
+            padding: 20px; z-index: 500; 
+            box-shadow: 0 20px 40px rgba(0,0,0,0.4);
+        }
+
+        .prog-container { width: 100%; height: 4px; background: rgba(255,255,255,0.1); border-radius: 2px; margin-bottom: 20px; position: relative; cursor: pointer; }
+        .prog-fill { position: absolute; height: 100%; background: #fff; width: 0%; border-radius: 2px; box-shadow: 0 0 10px #fff; }
+
+        .dock-main { display: flex; align-items: center; gap: 15px; }
+        .meta { flex: 1; overflow: hidden; }
+        #cur-title { font-weight: 800; font-size: 0.9rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        #cur-sub { font-size: 0.7rem; opacity: 0.5; text-transform: uppercase; letter-spacing: 1px; }
+
+        .controls { display: flex; align-items: center; gap: 20px; }
+        .c-btn { font-size: 1.2rem; cursor: pointer; opacity: 0.7; }
+        .play-main { 
+            width: 50px; height: 50px; background: #fff; color: #000; 
+            border-radius: 50%; display: flex; align-items: center; justify-content: center; 
+            font-size: 1rem; transition: 0.2s;
+        }
+        .play-main:active { transform: scale(0.9); }
     </style>
 </head>
 <body>
 
+    <div class="bg-mesh"></div>
+
     <div id="portal" onclick="ignite()">
         <div class="v-orb"><span>V</span></div>
-        <p style="margin-top:20px; letter-spacing:10px; font-size:0.6rem; opacity:0.5;">VEDANT CORE</p>
+        <p style="margin-top:20px; letter-spacing:10px; font-size:0.6rem; opacity:0.5; font-weight:800;">VEDANT INFINITY</p>
     </div>
 
     <div class="container">
         <header>
             <h1>SONGS</h1>
-            <input type="text" class="search-box" id="search" placeholder="Search track..." oninput="filterSongs()">
         </header>
+        
+        <div class="search-container">
+            <input type="text" class="search-box" id="search" placeholder="Search track..." oninput="filterSongs()">
+        </div>
 
         <div class="list" id="list"></div>
 
         <div class="dock">
-            <div class="prog-container" onclick="seek(event)"><div class="prog-fill" id="fill"></div></div>
+            <div class="prog-container" id="prog-base" onclick="seek(event)"><div class="prog-fill" id="fill"></div></div>
             <div class="dock-main">
-                <div class="now-playing-meta">
+                <div class="meta">
                     <p id="cur-title">V-CORE Standby</p>
+                    <p id="cur-sub">Ready for High-Fidelity</p>
                 </div>
                 <div class="controls">
                     <div class="c-btn" onclick="prev()">⏮</div>
@@ -95,7 +159,8 @@
 
         async function ignite() {
             audio.play().then(() => audio.pause());
-            document.getElementById('portal').style.transform = "translateY(-100%)";
+            document.getElementById('portal').style.opacity = "0";
+            setTimeout(() => document.getElementById('portal').style.display = "none", 1000);
             load();
         }
 
@@ -134,7 +199,7 @@
             const song = currentSongs[i];
             audio.src = song.url;
             audio.play();
-            document.getElementById('cur-title').innerText = song.title;
+            document.getElementById('cur-title').innerText = song.name;
             document.getElementById('playBtn').innerText = "⏸";
             render();
             updateMediaSession(song);
@@ -147,21 +212,20 @@
         }
 
         function next() { if(currentIdx < currentSongs.length - 1) playSong(currentIdx + 1); }
-        function prev() { if(currentIdx > 0) playSong(currentIdx - 1); }
+        function prev() { if (currentIdx > 0) playSong(currentIdx - 1); }
 
         function seek(e) {
-            const p = e.clientX / window.innerWidth;
+            const rect = document.getElementById('prog-base').getBoundingClientRect();
+            const p = (e.clientX - rect.left) / rect.width;
             audio.currentTime = p * audio.duration;
         }
 
-        // BACKGROUND PLAY (Lock Screen Controls)
         function updateMediaSession(song) {
             if ('mediaSession' in navigator) {
                 navigator.mediaSession.metadata = new MediaMetadata({
                     title: song.name,
-                    artist: 'V-CORE Library',
-                    album: 'GitHub Cloud',
-                    artwork: [{ src: 'https://via.placeholder.com/512/FFFFFF/000000?text=V', sizes: '512x512', type: 'image/png' }]
+                    artist: 'V-CORE Infinity',
+                    artwork: [{ src: 'https://via.placeholder.com/512/000000/FFFFFF?text=V', sizes: '512x512', type: 'image/png' }]
                 });
                 navigator.mediaSession.setActionHandler('play', () => toggle());
                 navigator.mediaSession.setActionHandler('pause', () => toggle());
@@ -171,9 +235,12 @@
         }
 
         audio.ontimeupdate = () => {
-            const p = (audio.currentTime / audio.duration) * 100;
-            document.getElementById('fill').style.width = p + "%";
+            if (!isNaN(audio.duration)) {
+                const p = (audio.currentTime / audio.duration) * 100;
+                document.getElementById('fill').style.width = p + "%";
+            }
         };
+        
         audio.onended = () => next();
     </script>
 </body>
