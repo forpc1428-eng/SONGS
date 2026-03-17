@@ -22,13 +22,15 @@
         }
 
         /* --- 1. THE DOODLE PORTAL --- */
-        #portal {
+      #portal {
             position: fixed; inset: 0; z-index: 10000; background: #fff;
-            background-image: url('https://st3.depositphotos.com/1006597/15121/v/450/depositphotos_151212850-stock-illustration-doodle-monsters-seamless-pattern.jpg');
-            background-size: 400px; display: flex; align-items: center; justify-content: center;
+            /* Using your specific ImageKit URL */
+            background-image: url('https://ik.imagekit.io/22h7wv5o2/doodle.jpg?updatedAt=1773773281436');
+            background-size: 500px; /* Adjusted for detail */
+            display: flex; align-items: center; justify-content: center;
             transition: clip-path 2.2s cubic-bezier(0.8, 0, 0.2, 1); 
             clip-path: circle(150% at 50% 50%);
-            animation: doodleScroll 60s linear infinite;
+            animation: doodleScroll 80s linear infinite;
         }
         @keyframes doodleScroll { from {background-position:0 0;} to {background-position:400px 400px;} }
 
@@ -123,7 +125,7 @@
     <div id="portal" onclick="ignite()">
         <div class="portal-card">
             <h1>VEDANT</h1>
-            <p style="color:#000; font-weight:900; letter-spacing:6px; font-size:0.7rem; margin-top:10px;">ENTER THE OMNIVERSE</p>
+            <p style="color:#000; font-weight:900; letter-spacing:6px; font-size:0.7rem; margin-top:10px;">ENTER THE IMAGINATION</p>
         </div>
     </div>
 
@@ -133,7 +135,7 @@
 
     <div class="container" id="app">
         <header>
-            <p style="font-size: 0.6rem; letter-spacing: 10px; opacity: 0.5; margin-bottom: 15px; font-weight:800;">SOVEREIGN ENGINE v1000Q</p>
+            <p style="font-size: 0.6rem; letter-spacing: 10px; opacity: 0.5; margin-bottom: 15px; font-weight:800;">SOVEREIGN ENGINE v1.4.2.8</p>
             <div id="header-text">VEDANT'S<br>PLAYLIST</div>
         </header>
 
