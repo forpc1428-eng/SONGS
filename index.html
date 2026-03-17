@@ -3,27 +3,27 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Simple Music App</title>
+<title>Vedant Music</title>
 
 <style>
 body{
+  margin:0;
+  font-family:Arial;
   background:#000;
   color:#fff;
-  font-family:Arial;
-  margin:0;
-  padding:20px;
 }
 
 h1{
   text-align:center;
+  padding:20px;
 }
 
 #songs{
-  margin-top:20px;
+  padding-bottom:100px;
 }
 
 .song{
-  padding:12px;
+  padding:15px;
   border-bottom:1px solid #222;
   cursor:pointer;
 }
@@ -44,16 +44,16 @@ h1{
   align-items:center;
 }
 
-button{
-  padding:10px 15px;
+.controls button{
   margin:5px;
+  padding:10px 15px;
+  border:none;
   background:#222;
   color:#fff;
-  border:none;
   cursor:pointer;
 }
 
-button:hover{
+.controls button:hover{
   background:#333;
 }
 </style>
@@ -61,57 +61,55 @@ button:hover{
 
 <body>
 
-<h1>My Music</h1>
+<h1>🎧 Vedant Music</h1>
 
 <div id="songs"></div>
 
 <div class="player">
   <div id="now">Nothing Playing</div>
-  <div>
-    <button onclick="prev()">Prev</button>
-    <button onclick="toggle()">Play/Pause</button>
-    <button onclick="next()">Next</button>
+  <div class="controls">
+    <button onclick="prev()">⏮</button>
+    <button onclick="toggle()">⏯</button>
+    <button onclick="next()">⏭</button>
   </div>
 </div>
 
 <script>
-const API = "https://script.google.com/macros/s/AKfycbwwYEAgMQTV5yulcPTnFwt2-lVzJOXxJU88G5x3ZcmaTzfi4uOzl81kcAlzqj_yhObg/exec";
+const API = "https://script.google.com/macros/s/AKfycbxjKDwiQuQ8qPyfVjCo4c6pQSMDAVHCC3fpaUieJMe8-Vcoiq6r8dgjAjl0iZ6TDyr4/exec";
 
 let songs = [];
 let currentIndex = 0;
 
-let audio = new Audio();
+const audio = new Audio();
 audio.preload = "auto";
+audio.crossOrigin = "anonymous";
+audio.playsInline = true;
 
-// 🔥 Fix Drive links
-function getPlayableUrl(url){
-  let id = url.match(/[-\\w]{25,}/);
-  if(id){
-    return "https://docs.google.com/uc?export=download&id=" + id[0];
-  }
-  return url;
-}
-
-// Load songs
+// LOAD SONGS
 async function load(){
-  let res = await fetch(API);
-  let data = await res.json();
+  try{
+    const res = await fetch(API);
+    const data = await res.json();
 
-  songs = data.map(s => ({
-    title: s.name.replace(".mp3","").replaceAll("_"," "),
-    url: getPlayableUrl(s.link)
-  }));
+    songs = data.map(s => ({
+      title: s.name.replace(".mp3","").replace(".wav","").replaceAll("_"," "),
+      url: s.link
+    }));
 
-  render();
+    render();
+  }catch(e){
+    console.error(e);
+    alert("Failed to load songs");
+  }
 }
 
-// Render list
+// RENDER LIST
 function render(){
-  let container = document.getElementById("songs");
+  const container = document.getElementById("songs");
   container.innerHTML = "";
 
   songs.forEach((s, i)=>{
-    let div = document.createElement("div");
+    const div = document.createElement("div");
     div.className = "song";
     div.innerText = s.title;
     div.onclick = ()=> play(i);
@@ -119,26 +117,27 @@ function render(){
   });
 }
 
-// Play
+// PLAY FUNCTION
 async function play(i){
   try{
     currentIndex = i;
-    let s = songs[i];
+    const s = songs[i];
 
     audio.pause();
-    audio.src = s.url;
+    audio.src = s.link;
     audio.load();
 
     await audio.play();
 
     document.getElementById("now").innerText = s.title;
 
-  }catch(e){
-    alert("Playback failed");
+  }catch(err){
+    console.error(err);
+    alert("Playback failed (Drive issue)");
   }
 }
 
-// Controls
+// CONTROLS
 function toggle(){
   if(audio.paused){
     audio.play();
@@ -159,12 +158,23 @@ function prev(){
   }
 }
 
-// Auto next
+// AUTO NEXT
 audio.addEventListener("ended", ()=>{
   next();
 });
 
-// Start
+// BUFFER STATUS (optional but helpful)
+audio.addEventListener("waiting", ()=>{
+  document.getElementById("now").innerText = "Buffering...";
+});
+
+audio.addEventListener("playing", ()=>{
+  if(songs[currentIndex]){
+    document.getElementById("now").innerText = songs[currentIndex].title;
+  }
+});
+
+// INIT
 load();
 </script>
 
