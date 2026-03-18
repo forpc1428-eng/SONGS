@@ -1,0 +1,17 @@
+{
+  "name": "Vedant's Playlist",
+  "short_name": "Vedant",
+  "start_url": "index.html",
+  "display": "standalone",
+  "background_color": "#000000",
+  "theme_color": "#000000",
+  "orientation": "portrait",
+  "icons": [
+    {
+      "src": "https://raw.githubusercontent.com/forpc1428-eng/SONGS/main/theme_artwork.jpg",
+      "sizes": "512x512",
+      "type": "image/jpeg",
+      "purpose": "any maskable"
+    }
+  ]
+}
