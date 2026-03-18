@@ -3,28 +3,47 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Luxury Player</title>
+<title>VEDANT PLAYER</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@100;900&family=Playfair+Display:wght@900&family=Fraunces:wght@200;900&family=Bebas+Neue&family=Orbitron&family=Oswald&family=Raleway:wght@100;900&family=Montserrat:wght@100;900&family=Poppins:wght@100;900&family=Libre+Baskerville:wght@700&display=swap" rel="stylesheet">
+
 <link rel="stylesheet" href="style.css">
 </head>
 
 <body>
 
-<div id="portal">
-    <h1>ENTER</h1>
+<!-- DOODLE PORTAL -->
+<div id="portal" onclick="ignite()">
+    <div class="portal-card">
+        <h1>VEDANT</h1>
+        <p>ENTER EXPERIENCE</p>
+    </div>
 </div>
 
+<!-- MAIN APP -->
 <div id="app" class="hidden">
 
-    <div id="player-section">
+    <div class="bg"></div>
+
+    <header>
+        <h1 id="title">VEDANT PLAYER</h1>
+    </header>
+
+    <div id="list" class="list"></div>
+
+    <div class="player">
         <h2 id="track-name">---</h2>
+
         <div class="controls">
             <button onclick="prev()">⏮</button>
             <button onclick="toggle()" id="play-btn">▶</button>
             <button onclick="next()">⏭</button>
         </div>
-    </div>
 
-    <div id="list"></div>
+        <div class="progress" onclick="seek(event)">
+            <div id="fill"></div>
+        </div>
+    </div>
 
 </div>
 
