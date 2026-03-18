@@ -138,7 +138,7 @@
         navigator.mediaSession.metadata = new MediaMetadata({
           title: songs[currentIdx].name,
           artist: "Vedant",
-          artwork: [{ src: ARTWORK, sizes: '2880x2880', type: 'image/jpeg' }]
+          artwork: [{ src: ARTWORK, sizes: '800x800', type: 'image/jpeg' }]
         });
         navigator.mediaSession.setActionHandler('play', () => toggle());
         navigator.mediaSession.setActionHandler('pause', () => toggle());
