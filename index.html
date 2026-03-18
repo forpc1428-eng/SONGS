@@ -22,7 +22,7 @@
         }
 
         /* --- 1. THE DOODLE PORTAL --- */
-      #portal {
+        #portal {
             position: fixed; inset: 0; z-index: 10000; background: #fff;
             background-image: url('https://ik.imagekit.io/22h7wv5o2/doodle.jpg?updatedAt=1773773281436');
             background-size: 500px;
@@ -40,30 +40,26 @@
         }
         .portal-card:active { transform: rotate(0deg) scale(0.9); }
         .portal-card h1 { font-family: 'Bebas Neue'; font-size: 5rem; color: #000; line-height: 0.8; }
-        .melt-exit { clip-path: circle(0% at 50% 50%) !important; }
+        .melt-exit { clip-path: circle(0% at 50% 50%) !important; pointer-events: none; }
 
-        /* --- 2. THE CHAMELEON DARK-FLOW ENVIRONMENT (UPDATED) --- */
+        /* --- 2. THE CONTINUOUS COLOR-FLOW ENVIRONMENT --- */
         .chameleon-bg { 
-            position: fixed; 
-            inset: 0; 
-            z-index: -2; 
-            background: linear-gradient(125deg, #050505, #0a0a0a, #050505);
+            position: fixed; inset: 0; z-index: -2; 
+            /* Deep HSL values (5% lightness) keep it dark but colorful */
+            background: linear-gradient(125deg, hsl(0, 40%, 5%), hsl(120, 40%, 5%), hsl(240, 40%, 5%));
             background-size: 400% 400%;
-            animation: darkFlow 30s ease infinite; 
+            animation: darkFlow 25s linear infinite; 
         }
 
         @keyframes darkFlow {
-            0% { background-color: hsl(0, 40%, 4%); background-position: 0% 50%; }
-            20% { background-color: hsl(280, 40%, 4%); }
-            40% { background-color: hsl(210, 40%, 4%); }
-            60% { background-color: hsl(150, 40%, 4%); background-position: 100% 50%; }
-            80% { background-color: hsl(40, 40%, 4%); }
-            100% { background-color: hsl(360, 40%, 4%); background-position: 0% 50%; }
+            0% { background-position: 0% 50%; filter: hue-rotate(0deg); }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; filter: hue-rotate(360deg); }
         }
         
         .vignette { 
             position: fixed; inset: 0; z-index: -1; 
-            background: radial-gradient(circle at center, transparent 0%, rgba(0,0,0,0.5) 50%, rgba(0,0,0,1) 100%); 
+            background: radial-gradient(circle at center, transparent 0%, rgba(0,0,0,0.5) 60%, rgba(0,0,0,1) 100%); 
             pointer-events: none; 
         }
 
@@ -98,7 +94,7 @@
         }
         .track-card::after { 
             content: ''; position: absolute; inset: 0; 
-            background: linear-gradient(115deg, transparent 40%, rgba(255,255,255,0.12) 50%, transparent 60%); 
+            background: linear-gradient(115deg, transparent 40%, rgba(255,255,255,0.1) 50%, transparent 60%); 
             transform: translateX(-100%); transition: 0.8s; 
         }
         .track-card:hover::after { transform: translateX(100%); }
@@ -120,7 +116,6 @@
             display: flex; align-items: center; justify-content: center; font-size: 1.5rem; 
             cursor: pointer; transition: 0.3s; 
         }
-        .play-trigger:active { transform: scale(0.9); }
 
         .container { display: flex; flex-direction: column; height: 100vh; opacity: 0; transition: 2s; }
         #toast { 
@@ -148,7 +143,7 @@
 
     <div class="container" id="app">
         <header>
-            <p style="font-size: 0.6rem; letter-spacing: 10px; opacity: 0.5; margin-bottom: 15px; font-weight:800;">SOVEREIGN ENGINE v1.4.2.8</p>
+            <p style="font-size: 0.6rem; letter-spacing: 10px; opacity: 0.5; margin-bottom: 15px; font-weight:800;">ENDLESS CHOICES v1.4.2.8</p>
             <div id="header-text">VEDANT'S<br>PLAYLIST</div>
         </header>
 
@@ -181,8 +176,7 @@
             { family: "'Playfair Display'", weight: "900", spacing: "-4px", style: "italic" },
             { family: "'Inter'", weight: "100", spacing: "14px", style: "normal" },
             { family: "'Fraunces'", weight: "900", spacing: "-1px", settings: "'SOFT' 100, 'WONK' 1" },
-            { family: "'Inter'", weight: "900", spacing: "-2px", style: "normal" },
-            { family: "'Fraunces'", weight: "200", spacing: "6px", settings: "'SOFT' 0, 'WONK' 0" }
+            { family: "'Inter'", weight: "900", spacing: "-2px", style: "normal" }
         ];
         let stateIdx = 0;
         function morph() {
@@ -228,10 +222,11 @@
             if (!analyzer) return;
             analyzer.getByteFrequencyData(dataArray);
             const bass = dataArray[2] / 255;
-            document.getElementById('orb').style.transform = `translate(-50%, -50%) scale(${1 + bass * 1.2})`;
-            document.getElementById('orb').style.opacity = 0.15 + (bass * 0.5);
-            // Subtle brightness boost on bass hits
-            document.querySelector('.chameleon-bg').style.filter = `brightness(${1 + bass * 0.5})`;
+            document.getElementById('orb').style.transform = `translate(-50%, -50%) scale(${1 + bass * 1.5})`;
+            document.getElementById('orb').style.opacity = 0.1 + (bass * 0.4);
+            
+            // Subtle brightness lift on bass hits for the background
+            document.querySelector('.chameleon-bg').style.filter = `brightness(${1 + bass * 0.4})`;
         }
 
         function ignite() {
