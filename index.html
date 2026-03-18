@@ -5,13 +5,13 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>VEDANT PLAYER</title>
 
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@100;900&family=Playfair+Display:wght@900&family=Bebas+Neue&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@100;900&family=Playfair+Display:wght@900&family=Fraunces:wght@100;900&family=Bebas+Neue&family=Orbitron&family=Oswald&family=Raleway:wght@100;900&family=Montserrat:wght@100;900&family=Poppins:wght@100;900&family=Libre+Baskerville&display=swap" rel="stylesheet">
 
 <style>
 *{margin:0;padding:0;box-sizing:border-box;font-family:Inter;}
 body{background:#000;color:#fff;overflow:hidden}
 
-/* ===== DOODLE PORTAL ===== */
+/* ===== LIQUID PORTAL ===== */
 #portal{
 position:fixed;inset:0;z-index:10000;
 background:#fff;
@@ -19,163 +19,118 @@ background-image:url('https://ik.imagekit.io/22h7wv5o2/doodle.jpg?updatedAt=1773
 background-size:500px;
 display:flex;align-items:center;justify-content:center;
 animation:doodleScroll 80s linear infinite;
+transition:all 2.5s cubic-bezier(.2,.8,.2,1);
+box-shadow:0 0 0px rgba(0,0,0,0);
 }
-
 @keyframes doodleScroll{
 from{background-position:0 0;}
 to{background-position:400px 400px;}
 }
 
-/* ===== INK SPREAD MASK ===== */
-#portal::after{
-content:"";
-position:absolute;inset:0;
-background:#000;
-
-/* START SMALL INK DOT */
-clip-path:circle(0% at 50% 50%);
+.melt-exit{
+transform:scale(0.6) translateY(-60px);
+filter:blur(25px);
+border-radius:50%;
+box-shadow:0 80px 120px rgba(0,0,0,0.6);
+animation:liquidWarp 2.5s forwards;
 }
 
-/* 🔥 INK SPREAD ANIMATION */
-#portal.ink-active::after{
-animation:inkSpread 2.2s cubic-bezier(.7,0,.2,1) forwards;
+@keyframes liquidWarp{
+0%{border-radius:0%}
+30%{border-radius:40% 60% 70% 30% / 40% 30% 70% 60%}
+60%{border-radius:60% 40% 30% 70% / 60% 70% 30% 40%}
+100%{border-radius:100%}
 }
 
-@keyframes inkSpread{
-0%{
-clip-path:circle(0% at 50% 50%);
-filter:blur(20px);
-}
-30%{
-clip-path:circle(30% at 48% 52%);
-}
-50%{
-clip-path:circle(70% at 52% 48%);
-}
-70%{
-clip-path:circle(120% at 47% 53%);
-}
-100%{
-clip-path:circle(150% at 50% 50%);
-filter:blur(0px);
-}
-}
-
-/* ===== VEDANT BUTTON ===== */
 .portal-card{
-background:#fff;
-color:#000;
-padding:60px;
+background:#fff;color:#000;padding:50px;
 border:12px solid #000;
 box-shadow:30px 30px 0 #000;
-transform:rotate(-6deg) skewX(-4deg);
+transform:rotate(-3deg);
 cursor:pointer;
-transition:.4s;
-z-index:2;
-}
-.portal-card:active{
-transform:rotate(-4deg) skewX(-2deg) scale(.92);
 }
 
-/* ===== APP BG ===== */
+/* ===== BACKGROUND ===== */
 .chameleon-bg{
 position:fixed;inset:0;z-index:-1;
-animation:bgShift 60s infinite;
+background:linear-gradient(120deg,#050505,#0a0a0a,#050505);
+background-size:600% 600%;
+animation:softShift 60s ease infinite;
 }
-@keyframes bgShift{
-0%{background:hsl(0,25%,6%)}
-25%{background:hsl(260,25%,6%)}
-50%{background:hsl(180,25%,6%)}
-75%{background:hsl(90,25%,6%)}
-100%{background:hsl(360,25%,6%)}
-}
-
-/* ===== APP ===== */
-#app{
-opacity:0;
-transition:2s;
-display:flex;
-flex-direction:column;
-height:100vh;
+@keyframes softShift{
+0%{background-color:hsl(0,25%,6%)}
+25%{background-color:hsl(250,25%,6%)}
+50%{background-color:hsl(180,25%,6%)}
+75%{background-color:hsl(90,25%,6%)}
+100%{background-color:hsl(360,25%,6%)}
 }
 
 /* ===== HEADER ===== */
-header{
-padding:60px;
-font-size:3rem;
-font-weight:900;
+header{padding:60px 30px;}
+#header-text{
+font-size:4rem;
+position:relative;
+height:5rem;
+overflow:hidden;
 }
+.font-layer{
+position:absolute;inset:0;
+opacity:0;
+transition:opacity 2s ease;
+}
+.font-layer.active{opacity:1}
 
 /* ===== LIST ===== */
-.scroll-list{
-flex:1;
-overflow:auto;
-padding:20px;
-}
-
+.scroll-list{flex:1;overflow:auto;padding:20px;}
 .track-card{
+position:relative;
 padding:20px;
 margin-bottom:12px;
-border-radius:20px;
-background:rgba(255,255,255,.05);
-backdrop-filter:blur(20px);
-cursor:pointer;
-transition:.2s;
+border-radius:25px;
+background:rgba(255,255,255,0.04);
+overflow:hidden;
 }
-.track-card:hover{
-transform:scale(1.03);
+
+/* animated lines */
+.lines{
+position:absolute;inset:0;
+pointer-events:none;
+}
+.line{
+position:absolute;height:2px;background:rgba(255,255,255,0.2);
+width:40%;
+transition:transform .1s linear;
 }
 
 /* ===== PLAYER ===== */
 .dock{
-position:fixed;
-bottom:20px;left:20px;right:20px;
+position:fixed;bottom:20px;left:20px;right:20px;
 background:rgba(10,10,10,.7);
-padding:20px;
-border-radius:40px;
+padding:20px;border-radius:40px;
 backdrop-filter:blur(40px);
 }
-
-.controls{
-display:flex;
-gap:20px;
-align-items:center;
-}
-.shuffle{
-cursor:pointer;
-font-size:1.4rem;
-}
-.shuffle.active{
-color:#00f2ff;
-}
-
-.rail{
-height:6px;
-background:#333;
-border-radius:10px;
-cursor:pointer;
-}
-.fill{
-height:100%;
-width:0;
-background:#fff;
-}
+.controls{display:flex;gap:20px;align-items:center;}
+.shuffle{font-size:1.5rem;cursor:pointer;}
+.shuffle.active{color:#00f2ff;}
+.rail{height:6px;background:#333;border-radius:10px;cursor:pointer;}
+.fill{height:100%;width:0;background:#fff;}
 </style>
 </head>
 
 <body>
 
-<!-- PORTAL -->
-<div id="portal">
-<div class="portal-card" onclick="ignite()">
+<div id="portal" onclick="ignite()">
+<div class="portal-card">
 <h1 style="font-family:Bebas Neue;font-size:5rem;">VEDANT</h1>
 </div>
 </div>
 
 <div class="chameleon-bg"></div>
 
-<div id="app">
-<header>VEDANT'S PLAYLIST</header>
+<div id="app" style="opacity:0;transition:2s;display:flex;flex-direction:column;height:100vh">
+
+<header id="header-text"></header>
+
 <div class="scroll-list" id="list"></div>
 
 <div class="dock">
@@ -190,8 +145,10 @@ background:#fff;
 <div onclick="toggle()">▶</div>
 <div onclick="next()">⏭</div>
 </div>
+
 </div>
 </div>
+
 </div>
 
 <audio id="player"></audio>
@@ -200,40 +157,58 @@ background:#fff;
 const audio=document.getElementById('player');
 let songs=[],currentIdx=0,shuffle=false;
 
-/* ===== INK ENTRY ===== */
+/* ===== FONT SMOOTH FADE ===== */
+const fonts=[
+"Playfair Display","Inter","Fraunces","Bebas Neue",
+"Orbitron","Oswald","Raleway","Montserrat","Poppins","Libre Baskerville"
+];
+
+const header=document.getElementById('header-text');
+
+fonts.forEach((f,i)=>{
+const div=document.createElement('div');
+div.className='font-layer';
+div.style.fontFamily=f;
+div.innerHTML="VEDANT'S<br>PLAYLIST";
+header.appendChild(div);
+});
+
+let fi=0;
+function morph(){
+const layers=document.querySelectorAll('.font-layer');
+layers.forEach(l=>l.classList.remove('active'));
+layers[fi%layers.length].classList.add('active');
+fi++;
+}
+setInterval(morph,4000);
+morph();
+
+/* ===== PORTAL ===== */
 function ignite(){
-const portal=document.getElementById('portal');
-
-portal.classList.add('ink-active');
-
-/* reveal app mid animation */
-setTimeout(()=>{
-document.getElementById('app').style.opacity="1";
+document.getElementById('portal').classList.add('melt-exit');
+document.getElementById('app').style.opacity=1;
 loadSongs();
-},700);
-
-/* remove portal after spread */
-setTimeout(()=>{
-portal.style.display="none";
-},2300);
 }
 
-/* ===== SONG FETCH ===== */
+/* ===== SONGS ===== */
 async function loadSongs(){
 const res=await fetch(`https://api.github.com/repos/forpc1428-eng/SONGS/contents/`);
 const data=await res.json();
-
 songs=data.filter(f=>f.name.endsWith('.mp3')).map(f=>({
-name:f.name,
-url:`https://media.githubusercontent.com/media/forpc1428-eng/SONGS/main/${encodeURIComponent(f.name)}`
+name:f.name,url:`https://media.githubusercontent.com/media/forpc1428-eng/SONGS/main/${encodeURIComponent(f.name)}`
 }));
-
 renderList();
 }
 
 function renderList(){
 document.getElementById('list').innerHTML=songs.map((s,i)=>`
-<div class="track-card" onclick="playSong(${i})">${s.name}</div>
+<div class="track-card" onclick="playSong(${i})">
+${s.name}
+<div class="lines">
+<div class="line" style="top:20%"></div>
+<div class="line" style="top:60%"></div>
+</div>
+</div>
 `).join('');
 }
 
@@ -255,7 +230,7 @@ shuffle=!shuffle;
 document.getElementById('shuffleBtn').classList.toggle('active');
 };
 
-/* ===== SEEK ===== */
+/* ===== SLIDER ===== */
 const rail=document.getElementById('rail');
 rail.onmousemove=e=>{
 if(e.buttons){
@@ -267,6 +242,23 @@ audio.currentTime=((e.clientX-r.left)/r.width)*audio.duration;
 audio.ontimeupdate=()=>{
 document.getElementById('fill').style.width=(audio.currentTime/audio.duration)*100+"%";
 };
+
+/* ===== GYRO + MOUSE LINES ===== */
+function moveLines(x,y){
+document.querySelectorAll('.line').forEach(l=>{
+l.style.transform=`translate(${x*10}px,${y*10}px)`;
+});
+}
+
+window.onmousemove=e=>{
+moveLines((e.clientX/window.innerWidth)-0.5,(e.clientY/window.innerHeight)-0.5);
+};
+
+if(window.DeviceOrientationEvent){
+window.addEventListener('deviceorientation',e=>{
+moveLines(e.gamma/30,e.beta/30);
+});
+}
 </script>
 
 </body>
