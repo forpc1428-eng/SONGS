@@ -2,147 +2,139 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>VEDANT PLAYER</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+<title>VEDANT'S PLAYLIST</title>
 
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100;900&family=Playfair+Display:wght@900&family=Fraunces:wght@100;900&family=Bebas+Neue&family=Orbitron&family=Oswald&family=Raleway:wght@100;900&family=Montserrat:wght@100;900&family=Poppins:wght@100;900&family=Libre+Baskerville&display=swap" rel="stylesheet">
 
 <style>
-*{margin:0;padding:0;box-sizing:border-box;font-family:Inter;}
-body{background:#000;color:#fff;overflow:hidden}
+:root { --accent:#00f2ff; --glass:rgba(255,255,255,0.03); --border:rgba(255,255,255,0.08); }
+*{margin:0;padding:0;box-sizing:border-box;font-family:'Inter';-webkit-tap-highlight-color:transparent;}
+body{background:#000;color:#fff;height:100vh;overflow:hidden;position:fixed;width:100%;}
 
-/* ===== LIQUID PORTAL ===== */
+/* ===== PORTAL (UPGRADED TRANSITION) ===== */
 #portal{
-position:fixed;inset:0;z-index:10000;
-background:#fff;
+position:fixed;inset:0;z-index:10000;background:#fff;
 background-image:url('https://ik.imagekit.io/22h7wv5o2/doodle.jpg?updatedAt=1773773281436');
 background-size:500px;
 display:flex;align-items:center;justify-content:center;
 animation:doodleScroll 80s linear infinite;
-transition:all 2.5s cubic-bezier(.2,.8,.2,1);
-box-shadow:0 0 0px rgba(0,0,0,0);
+clip-path:circle(150% at 50% 50%);
+transition:clip-path 2.5s cubic-bezier(.7,0,.2,1), transform 2.5s ease, filter 2.5s;
 }
-@keyframes doodleScroll{
-from{background-position:0 0;}
-to{background-position:400px 400px;}
-}
+@keyframes doodleScroll{from{background-position:0 0;}to{background-position:400px 400px;}}
 
 .melt-exit{
-transform:scale(0.6) translateY(-60px);
-filter:blur(25px);
-border-radius:50%;
-box-shadow:0 80px 120px rgba(0,0,0,0.6);
-animation:liquidWarp 2.5s forwards;
-}
-
-@keyframes liquidWarp{
-0%{border-radius:0%}
-30%{border-radius:40% 60% 70% 30% / 40% 30% 70% 60%}
-60%{border-radius:60% 40% 30% 70% / 60% 70% 30% 40%}
-100%{border-radius:100%}
+clip-path:circle(0% at 50% 50%)!important;
+transform:scale(1.5) rotate(8deg);
+filter:blur(20px);
 }
 
 .portal-card{
-background:#fff;color:#000;padding:50px;
-border:12px solid #000;
+background:#fff;padding:50px;border:12px solid #000;
 box-shadow:30px 30px 0 #000;
-transform:rotate(-3deg);
-cursor:pointer;
+transform:rotate(-3deg);text-align:center;cursor:pointer;
+transition:.4s cubic-bezier(.2,.8,.2,1);
+}
+.portal-card:active{transform:scale(.9);}
+
+/* ===== BACKGROUND UPGRADE ===== */
+.chameleon-bg{
+position:fixed;inset:0;z-index:-2;
+background:linear-gradient(130deg,#050505,#0a0a0a,#050505);
+background-size:500% 500%;
+animation:ultraFlow 40s ease infinite;
+}
+@keyframes ultraFlow{
+0%{background-color:hsl(0,30%,5%);}
+20%{background-color:hsl(280,30%,5%);}
+40%{background-color:hsl(210,30%,5%);}
+60%{background-color:hsl(150,30%,5%);}
+80%{background-color:hsl(40,30%,5%);}
+100%{background-color:hsl(360,30%,5%);}
 }
 
-/* ===== BACKGROUND ===== */
-.chameleon-bg{
-position:fixed;inset:0;z-index:-1;
-background:linear-gradient(120deg,#050505,#0a0a0a,#050505);
-background-size:600% 600%;
-animation:softShift 60s ease infinite;
-}
-@keyframes softShift{
-0%{background-color:hsl(0,25%,6%)}
-25%{background-color:hsl(250,25%,6%)}
-50%{background-color:hsl(180,25%,6%)}
-75%{background-color:hsl(90,25%,6%)}
-100%{background-color:hsl(360,25%,6%)}
+.vignette{position:fixed;inset:0;z-index:-1;background:radial-gradient(circle,transparent 0%,#000 100%);}
+
+.reactive-orb{
+position:absolute;width:120vw;height:120vh;
+background:radial-gradient(circle,var(--accent),transparent 70%);
+border-radius:50%;filter:blur(120px);opacity:.15;
+transform:translate(-50%,-50%);transition:.1s linear;
 }
 
 /* ===== HEADER ===== */
-header{padding:60px 30px;}
+header{padding:70px 30px 30px;}
 #header-text{
-font-size:4rem;
-position:relative;
-height:5rem;
-overflow:hidden;
+font-size:clamp(3rem,12vw,5rem);
+transition:all 2.5s cubic-bezier(.4,0,.2,1);
 }
-.font-layer{
-position:absolute;inset:0;
-opacity:0;
-transition:opacity 2s ease;
-}
-.font-layer.active{opacity:1}
 
 /* ===== LIST ===== */
-.scroll-list{flex:1;overflow:auto;padding:20px;}
+.scroll-list{flex:1;overflow-y:auto;padding:0 20px 280px;}
 .track-card{
-position:relative;
-padding:20px;
+background:var(--glass);
+border:1px solid var(--border);
+border-radius:35px;
+padding:28px;
 margin-bottom:12px;
-border-radius:25px;
-background:rgba(255,255,255,0.04);
-overflow:hidden;
-}
-
-/* animated lines */
-.lines{
-position:absolute;inset:0;
-pointer-events:none;
-}
-.line{
-position:absolute;height:2px;background:rgba(255,255,255,0.2);
-width:40%;
-transition:transform .1s linear;
 }
 
 /* ===== PLAYER ===== */
 .dock{
-position:fixed;bottom:20px;left:20px;right:20px;
-background:rgba(10,10,10,.7);
-padding:20px;border-radius:40px;
-backdrop-filter:blur(40px);
+position:fixed;bottom:30px;left:20px;right:20px;
+background:rgba(10,10,10,.75);
+backdrop-filter:blur(60px);
+border-radius:50px;padding:30px;
+transform:translateY(160%);
+transition:1s cubic-bezier(.2,1,.2,1);
 }
-.controls{display:flex;gap:20px;align-items:center;}
-.shuffle{font-size:1.5rem;cursor:pointer;}
-.shuffle.active{color:#00f2ff;}
-.rail{height:6px;background:#333;border-radius:10px;cursor:pointer;}
-.fill{height:100%;width:0;background:#fff;}
+.dock.visible{transform:translateY(0);}
+
+.rail{width:100%;height:8px;background:#333;border-radius:10px;cursor:pointer;}
+.fill{height:100%;width:0;background:#fff;border-radius:10px;}
+
+.controls{display:flex;gap:25px;align-items:center;}
+.play-trigger{width:70px;height:70px;background:#fff;color:#000;border-radius:50%;display:flex;align-items:center;justify-content:center;cursor:pointer;}
+
+.shuffle{font-size:1.4rem;cursor:pointer;opacity:.6;}
+.shuffle.active{color:#00f2ff;opacity:1;}
+
+.container{display:flex;flex-direction:column;height:100vh;opacity:0;transition:2s;}
 </style>
 </head>
 
-<body>
+<body onmousemove="handleGlobal(event)" ontouchmove="handleGlobal(event)">
 
 <div id="portal" onclick="ignite()">
 <div class="portal-card">
-<h1 style="font-family:Bebas Neue;font-size:5rem;">VEDANT</h1>
+<h1 style="font-family:'Bebas Neue';font-size:5rem;color:#000;">VEDANT</h1>
+<p style="color:#000;font-weight:900;">ENTER</p>
 </div>
 </div>
 
 <div class="chameleon-bg"></div>
+<div class="vignette"></div>
+<div class="reactive-orb" id="orb"></div>
 
-<div id="app" style="opacity:0;transition:2s;display:flex;flex-direction:column;height:100vh">
+<div class="container" id="app">
 
-<header id="header-text"></header>
+<header>
+<div id="header-text">VEDANT'S<br>PLAYLIST</div>
+</header>
 
 <div class="scroll-list" id="list"></div>
 
-<div class="dock">
+<div class="dock" id="dock">
 <div class="rail" id="rail"><div class="fill" id="fill"></div></div>
 
-<div style="display:flex;justify-content:space-between;margin-top:15px">
+<div style="display:flex;justify-content:space-between;align-items:center;margin-top:20px;">
 <p id="track-name">---</p>
 
 <div class="controls">
-<div id="shuffleBtn" class="shuffle">🔀</div>
+<div class="shuffle" id="shuffleBtn">🔀</div>
 <div onclick="prev()">⏮</div>
-<div onclick="toggle()">▶</div>
+<div onclick="toggle()" id="play-btn" class="play-trigger">▶</div>
 <div onclick="next()">⏭</div>
 </div>
 
@@ -155,38 +147,36 @@ backdrop-filter:blur(40px);
 
 <script>
 const audio=document.getElementById('player');
-let songs=[],currentIdx=0,shuffle=false;
+let songs=[],currentIdx=-1,shuffle=false;
 
-/* ===== FONT SMOOTH FADE ===== */
+/* ===== 10 FONT MORPH (SMOOTH) ===== */
 const fonts=[
-"Playfair Display","Inter","Fraunces","Bebas Neue",
-"Orbitron","Oswald","Raleway","Montserrat","Poppins","Libre Baskerville"
+{f:"Playfair Display",w:"900",s:"-3px"},
+{f:"Inter",w:"100",s:"12px"},
+{f:"Fraunces",w:"900",s:"0px"},
+{f:"Bebas Neue",w:"400",s:"3px"},
+{f:"Orbitron",w:"700",s:"2px"},
+{f:"Oswald",w:"500",s:"1px"},
+{f:"Raleway",w:"100",s:"8px"},
+{f:"Montserrat",w:"900",s:"-2px"},
+{f:"Poppins",w:"300",s:"5px"},
+{f:"Libre Baskerville",w:"700",s:"0px"}
 ];
-
-const header=document.getElementById('header-text');
-
-fonts.forEach((f,i)=>{
-const div=document.createElement('div');
-div.className='font-layer';
-div.style.fontFamily=f;
-div.innerHTML="VEDANT'S<br>PLAYLIST";
-header.appendChild(div);
-});
-
 let fi=0;
 function morph(){
-const layers=document.querySelectorAll('.font-layer');
-layers.forEach(l=>l.classList.remove('active'));
-layers[fi%layers.length].classList.add('active');
+const h=document.getElementById('header-text');
+const s=fonts[fi%fonts.length];
+h.style.fontFamily=s.f;
+h.style.fontWeight=s.w;
+h.style.letterSpacing=s.s;
 fi++;
 }
-setInterval(morph,4000);
-morph();
+setInterval(morph,3000);
 
 /* ===== PORTAL ===== */
 function ignite(){
 document.getElementById('portal').classList.add('melt-exit');
-document.getElementById('app').style.opacity=1;
+document.getElementById('app').style.opacity="1";
 loadSongs();
 }
 
@@ -195,20 +185,15 @@ async function loadSongs(){
 const res=await fetch(`https://api.github.com/repos/forpc1428-eng/SONGS/contents/`);
 const data=await res.json();
 songs=data.filter(f=>f.name.endsWith('.mp3')).map(f=>({
-name:f.name,url:`https://media.githubusercontent.com/media/forpc1428-eng/SONGS/main/${encodeURIComponent(f.name)}`
+name:f.name.replace('.mp3',''),
+url:`https://media.githubusercontent.com/media/forpc1428-eng/SONGS/main/${encodeURIComponent(f.name)}`
 }));
 renderList();
 }
 
 function renderList(){
 document.getElementById('list').innerHTML=songs.map((s,i)=>`
-<div class="track-card" onclick="playSong(${i})">
-${s.name}
-<div class="lines">
-<div class="line" style="top:20%"></div>
-<div class="line" style="top:60%"></div>
-</div>
-</div>
+<div class="track-card" onclick="playSong(${i})">${s.name}</div>
 `).join('');
 }
 
@@ -220,9 +205,18 @@ audio.play();
 document.getElementById('track-name').innerText=songs[i].name;
 }
 
-function toggle(){audio.paused?audio.play():audio.pause();}
-function next(){shuffle?playSong(Math.random()*songs.length|0):playSong((currentIdx+1)%songs.length);}
-function prev(){playSong((currentIdx-1+songs.length)%songs.length);}
+function toggle(){
+audio.paused?audio.play():audio.pause();
+}
+
+function next(){
+if(shuffle){playSong(Math.floor(Math.random()*songs.length));}
+else if(currentIdx<songs.length-1)playSong(currentIdx+1);
+}
+
+function prev(){
+if(currentIdx>0)playSong(currentIdx-1);
+}
 
 /* ===== SHUFFLE ===== */
 document.getElementById('shuffleBtn').onclick=()=>{
@@ -230,36 +224,32 @@ shuffle=!shuffle;
 document.getElementById('shuffleBtn').classList.toggle('active');
 };
 
-/* ===== SLIDER ===== */
+/* ===== SLIDER DRAG ===== */
 const rail=document.getElementById('rail');
-rail.onmousemove=e=>{
-if(e.buttons){
-const r=rail.getBoundingClientRect();
-audio.currentTime=((e.clientX-r.left)/r.width)*audio.duration;
-}
-};
+let dragging=false;
 
+rail.addEventListener('mousedown',()=>dragging=true);
+window.addEventListener('mouseup',()=>dragging=false);
+window.addEventListener('mousemove',(e)=>{
+if(dragging){
+const rect=rail.getBoundingClientRect();
+const percent=(e.clientX-rect.left)/rect.width;
+audio.currentTime=percent*audio.duration;
+}
+});
+
+/* ===== PROGRESS ===== */
 audio.ontimeupdate=()=>{
-document.getElementById('fill').style.width=(audio.currentTime/audio.duration)*100+"%";
+const p=(audio.currentTime/audio.duration)*100;
+document.getElementById('fill').style.width=p+"%";
 };
 
-/* ===== GYRO + MOUSE LINES ===== */
-function moveLines(x,y){
-document.querySelectorAll('.line').forEach(l=>{
-l.style.transform=`translate(${x*10}px,${y*10}px)`;
-});
-}
-
-window.onmousemove=e=>{
-moveLines((e.clientX/window.innerWidth)-0.5,(e.clientY/window.innerHeight)-0.5);
-};
-
-if(window.DeviceOrientationEvent){
-window.addEventListener('deviceorientation',e=>{
-moveLines(e.gamma/30,e.beta/30);
-});
+/* ===== ORB ===== */
+function handleGlobal(e){
+const orb=document.getElementById('orb');
+orb.style.left=(e.clientX||0)+"px";
+orb.style.top=(e.clientY||0)+"px";
 }
 </script>
-
 </body>
 </html>
