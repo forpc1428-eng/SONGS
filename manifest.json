@@ -8,10 +8,10 @@
   "orientation": "portrait",
   "icons": [
     {
-      "src": "https://raw.githubusercontent.com/forpc1428-eng/SONGS/theme_artwork.jpg",
+      "src": "theme_artwork.jpg",
       "sizes": "400x400",
       "type": "image/jpeg",
-      "purpose": "any maskable"
+      "purpose": "any"
     }
   ]
 }
