@@ -5,11 +5,16 @@
   <title>VEDANT'S PLAYLIST</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <!-- Fonts -->
   <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap" rel="stylesheet">
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Montserrat:wght@600&display=swap" rel="stylesheet">
 
   <style>
+    :root {
+      --accent: #00f2ff;
+      --glass-bg: rgba(255, 255, 255, 0.05);
+      --glass-border: rgba(255, 255, 255, 0.12);
+    }
+
     body {
       margin: 0; background: #000; color: #fff;
       font-family: 'Montserrat', sans-serif;
@@ -17,7 +22,7 @@
       max-width: 100%; overflow-x: hidden;
     }
 
-    /* --- Landing Page --- */
+    /* --- Landing Page (UNCHANGED LOGIC) --- */
     #portal {
       position: fixed; inset: 0; z-index: 10000; background: #fff;
       background-image: url('https://ik.imagekit.io/22h7wv5o2/doodle.jpg?updatedAt=1773773281436');
@@ -34,52 +39,64 @@
       box-shadow: 10px 10px 0 #000; transform: rotate(-3deg); 
       text-align: center; cursor: pointer; transition: 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
     }
-    .portal-card:active { transform: rotate(0deg) scale(0.9); }
     .portal-card h1 { font-family: 'Bebas Neue', sans-serif; font-size: clamp(2rem, 12vw, 5rem); color: #000; line-height: 0.8; }
     .melt-exit { clip-path: circle(0% at 50% 50%) !important; pointer-events: none; }
 
     /* --- Home Page --- */
     #home-header {
-      font-family: 'Playfair Display', 'Montserrat', sans-serif;
-      font-size: clamp(2rem, 8vw, 4rem);
-      font-weight: 700;
-      color: #fff;
-      text-align: center;
-      margin: 20px 0;
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(2.5rem, 8vw, 4rem);
+      font-weight: 700; color: #fff;
+      text-align: center; margin: 40px 0 20px;
     }
 
-    .list { flex: 1; overflow-y: auto; padding: 20px; margin-bottom: 120px; }
+    .list { flex: 1; overflow-y: auto; padding: 20px; margin-bottom: 140px; scrollbar-width: none; }
+    .list::-webkit-scrollbar { display: none; }
+
     .track {
-      background: linear-gradient(135deg, rgba(255,255,255,0.08), rgba(255,255,255,0.02));
-      border: 1px solid rgba(255,255,255,0.15);
-      border-radius: 20px; padding: 16px; margin-bottom: 16px;
-      cursor: pointer; transition: all 0.3s ease;
+      background: var(--glass-bg);
+      border: 1px solid var(--glass-border);
+      border-radius: 20px; padding: 20px; margin-bottom: 16px;
+      cursor: pointer; transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
       box-shadow: 0 4px 12px rgba(0,0,0,0.4);
     }
-    .track:hover {
-      transform: translateY(-4px);
-      background: linear-gradient(135deg, rgba(0,242,255,0.2), rgba(255,255,255,0.05));
-      box-shadow: 0 8px 20px rgba(0,242,255,0.3);
+
+    /* --- NEW: Active/Playing Song State --- */
+    .track.playing {
+      transform: scale(1.03);
+      background: linear-gradient(135deg, rgba(0,242,255,0.15), rgba(255,255,255,0.05));
+      border-color: var(--accent);
+      box-shadow: 0 0 25px rgba(0, 242, 255, 0.2);
+      font-weight: 900;
+      color: var(--accent);
     }
 
+    /* --- Permanent Glassmorphism Bar --- */
     .bar {
-      position: fixed; bottom: 0; left: 0; right: 0;
-      background: rgba(255,255,255,0.08);
-      backdrop-filter: blur(20px);
-      border-top: 1px solid rgba(255,255,255,0.15); padding: 12px;
+      position: fixed; bottom: 20px; left: 15px; right: 15px;
+      background: rgba(15, 15, 15, 0.7);
+      backdrop-filter: blur(25px) saturate(180%);
+      -webkit-backdrop-filter: blur(25px) saturate(180%);
+      border: 1px solid var(--glass-border);
+      border-radius: 30px; padding: 15px 20px;
       display: flex; flex-direction: column;
       z-index: 9999;
+      box-shadow: 0 20px 50px rgba(0,0,0,0.5);
     }
-    .progress { height: 6px; background: rgba(255,255,255,0.2); border-radius: 10px; cursor: pointer; }
-    .fill { height: 100%; width: 0%; background: #fff; border-radius: 10px; transition: width 0.2s linear; }
-    .controls { display: flex; justify-content: space-around; margin-top: 10px; }
-    .btn { cursor: pointer; font-size: 1.5rem; transition: color 0.3s; }
-    .btn:hover { color: #00f2ff; }
-    .shuffle.active { color: #00f2ff; }
+
+    #time { font-size: 0.75rem; font-weight: 900; opacity: 0.6; margin-bottom: 12px; text-align: center; font-variant-numeric: tabular-nums;}
+    .progress { height: 5px; background: rgba(255,255,255,0.1); border-radius: 10px; cursor: pointer; }
+    .fill { height: 100%; width: 0%; background: var(--accent); border-radius: 10px; box-shadow: 0 0 10px var(--accent); transition: width 0.1s linear; }
+    
+    .controls { display: flex; justify-content: space-around; align-items: center; margin-top: 10px; }
+    .btn { cursor: pointer; font-size: 1.8rem; transition: 0.3s; color: rgba(255,255,255,0.8); }
+    .btn:hover { color: var(--accent); transform: scale(1.1); }
+    #play-trigger { font-size: 2.2rem; color: #fff; }
+    .shuffle.active { color: var(--accent); text-shadow: 0 0 10px var(--accent); }
   </style>
 </head>
 <body>
-  <!-- Landing -->
+
   <div id="portal" onclick="startApp()">
     <div class="portal-card">
       <h1>VEDANT</h1>
@@ -87,13 +104,11 @@
     </div>
   </div>
 
-  <!-- Home Header -->
   <header id="home-header">VEDANT'S PLAYLIST</header>
 
-  <!-- Song List -->
-  <div class="list" id="list"></div>
+  <div class="list" id="list">
+    </div>
 
-  <!-- Song Bar -->
   <div class="bar">
     <div id="time">0:00 / 0:00</div>
     <div class="progress" onclick="seek(event)">
@@ -101,21 +116,26 @@
     </div>
     <div class="controls">
       <div class="btn" onclick="prev()">⏮</div>
-      <div class="btn" onclick="toggle()">▶</div>
+      <div class="btn" id="play-trigger" onclick="toggle()">▶</div>
       <div class="btn" onclick="next()">⏭</div>
       <div class="btn shuffle" id="shuffle" onclick="toggleShuffle()">🔀</div>
     </div>
   </div>
 
-  <!-- Single audio element -->
   <audio id="player" preload="auto"></audio>
 
   <script>
-        const audio = document.getElementById('player');
+    const audio = document.getElementById('player');
+    const playBtn = document.getElementById('play-trigger');
     let songs = [], currentIdx = -1, shuffleOn = false;
 
+    // Fixed path for notification artwork
+    const THEME_ART = `https://raw.githubusercontent.com/forpc1428-eng/SONGS/main/theme_artwork.jpg`;
+
     async function startApp() {
+      // Your existing landing page logic
       document.getElementById('portal').classList.add('melt-exit');
+      
       const res = await fetch(`https://api.github.com/repos/forpc1428-eng/SONGS/contents/`);
       const data = await res.json();
       songs = data.filter(f => f.name.endsWith('.mp3')).map(f => ({
@@ -128,7 +148,9 @@
     function renderList() {
       const list = document.getElementById('list');
       list.innerHTML = songs.map((s,i)=>`
-        <div class="track" onclick="playSong(${i})">${s.name}</div>
+        <div class="track ${i === currentIdx ? 'playing' : ''}" onclick="playSong(${i})">
+          ${s.name}
+        </div>
       `).join('');
     }
 
@@ -136,13 +158,14 @@
       currentIdx = i;
       audio.src = songs[i].url;
       audio.play();
-      document.querySelector('.controls .btn:nth-child(2)').innerText = "⏸";
+      playBtn.innerText = "⏸";
       updateMediaSession();
+      renderList(); // Refresh list to update "Now Playing" style
     }
 
     function toggle() {
-      if(audio.paused){ audio.play(); document.querySelector('.controls .btn:nth-child(2)').innerText="⏸"; }
-      else { audio.pause(); document.querySelector('.controls .btn:nth-child(2)').innerText="▶"; }
+      if(audio.paused){ audio.play(); playBtn.innerText="⏸"; }
+      else { audio.pause(); playBtn.innerText="▶"; }
     }
 
     function next() {
@@ -155,8 +178,8 @@
     function prev(){ if(currentIdx>0) playSong(currentIdx-1); }
 
     function seek(e){
-      const rect = e.target.getBoundingClientRect();
-      audio.currentTime = ((e.clientX-rect.left)/rect.width)*audio.duration;
+      const rect = e.currentTarget.getBoundingClientRect();
+      audio.currentTime = ((e.clientX - rect.left) / rect.width) * audio.duration;
     }
 
     function toggleShuffle(){
@@ -172,18 +195,15 @@
 
     const fmt = s => `${Math.floor(s/60)}:${Math.floor(s%60).toString().padStart(2,'0')}`;
 
-    // Media Session API for notification/lock screen controls
     function updateMediaSession() {
       if ('mediaSession' in navigator && songs[currentIdx]) {
         navigator.mediaSession.metadata = new MediaMetadata({
           title: songs[currentIdx].name,
           artist: "Vedant",
-          artwork: [
-            { src: "purple_glass.png", sizes: "512x512", type: "image/png" }
-          ]
+          artwork: [{ src: THEME_ART, sizes: "512x512", type: "image/jpeg" }]
         });
-        navigator.mediaSession.setActionHandler('play', () => audio.play());
-        navigator.mediaSession.setActionHandler('pause', () => audio.pause());
+        navigator.mediaSession.setActionHandler('play', () => toggle());
+        navigator.mediaSession.setActionHandler('pause', () => toggle());
         navigator.mediaSession.setActionHandler('previoustrack', () => prev());
         navigator.mediaSession.setActionHandler('nexttrack', () => next());
       }
