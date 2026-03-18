@@ -3,6 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <title>VEDANT'S PLAYLIST</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
   <!-- Bebas Neue for landing -->
   <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap" rel="stylesheet">
   <!-- Premium fonts for home header -->
@@ -13,6 +15,7 @@
       margin: 0; background: #000; color: #fff;
       font-family: 'Montserrat', sans-serif;
       display: flex; flex-direction: column; height: 100vh;
+      max-width: 100%; overflow-x: hidden;
     }
 
     /* --- Landing Page (unchanged) --- */
@@ -29,11 +32,11 @@
 
     .portal-card { 
       background: #fff; padding: 50px; border: 12px solid #000; 
-      box-shadow: 30px 30px 0 #000; transform: rotate(-3deg); 
+      box-shadow: 10px 10px 0 #000; transform: rotate(-3deg); 
       text-align: center; cursor: pointer; transition: 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
     }
     .portal-card:active { transform: rotate(0deg) scale(0.9); }
-    .portal-card h1 { font-family: 'Bebas Neue', sans-serif; font-size: 5rem; color: #000; line-height: 0.8; }
+    .portal-card h1 { font-family: 'Bebas Neue', sans-serif; font-size: clamp(2rem, 12vw, 5rem); color: #000; line-height: 0.8; }
     .melt-exit { clip-path: circle(0% at 50% 50%) !important; pointer-events: none; }
 
     /* --- Home Page --- */
@@ -48,16 +51,15 @@
 
     .list { flex: 1; overflow-y: auto; padding: 20px; }
     .track {
-      background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1);
-      border-radius: 20px; padding: 15px; margin-bottom: 15px;
-      backdrop-filter: blur(20px); box-shadow: 0 10px 20px rgba(0,0,0,0.5);
+      background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.15);
+      border-radius: 16px; padding: 12px; margin-bottom: 12px;
       cursor: pointer; transition: transform 0.2s ease;
     }
     .track:active { transform: scale(0.97); }
 
     .bar {
-      background: rgba(255,255,255,0.05); backdrop-filter: blur(30px);
-      border-top: 1px solid rgba(255,255,255,0.1); padding: 15px;
+      background: rgba(255,255,255,0.08);
+      border-top: 1px solid rgba(255,255,255,0.15); padding: 12px;
       display: flex; flex-direction: column;
     }
     .progress { height: 6px; background: rgba(255,255,255,0.2); border-radius: 10px; cursor: pointer; }
@@ -126,6 +128,7 @@
       audio.src = songs[i].url;
       audio.play();
       document.querySelector('.controls .btn:nth-child(2)').innerText = "⏸";
+      updateMediaSession();
     }
 
     function toggle() {
@@ -159,6 +162,23 @@
     };
 
     const fmt = s => `${Math.floor(s/60)}:${Math.floor(s%60).toString().padStart(2,'0')}`;
+
+    // Media Session API for notification/lock screen controls
+    function updateMediaSession() {
+      if ('mediaSession' in navigator && songs[currentIdx]) {
+        navigator.mediaSession.metadata = new MediaMetadata({
+          title: songs[currentIdx].name,
+          artist: "Vedant",
+          artwork: [
+            { src: "purple_glass.png", sizes: "512x512", type: "image/png" }
+          ]
+        });
+        navigator.mediaSession.setActionHandler('play', () => audio.play());
+        navigator.mediaSession.setActionHandler('pause', () => audio.pause());
+        navigator.mediaSession.setActionHandler('previoustrack', () => prev());
+        navigator.mediaSession.setActionHandler('nexttrack', () => next());
+      }
+    }
   </script>
 </body>
 </html>
