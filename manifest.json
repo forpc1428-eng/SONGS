@@ -9,7 +9,7 @@
   "icons": [
     {
       "src": "angryemoji.jpg",
-      "sizes": "2880x2880",
+      "sizes": "800x800",
       "type": "image/jpeg",
       "purpose": "any"
     }
