@@ -1,31 +1,24 @@
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-}
-
 body {
-    background: #000;
-    color: #fff;
+    margin: 0;
+    background: black;
+    color: white;
     overflow: hidden;
     font-family: Inter, sans-serif;
 }
 
-/* ===== DOODLE PORTAL ===== */
+/* PORTAL */
 #portal {
     position: fixed;
     inset: 0;
-    z-index: 10000;
-    background: #fff;
+    background: white;
     background-image: url('https://ik.imagekit.io/22h7wv5o2/doodle.jpg?updatedAt=1773773281436');
     background-size: 500px;
     display: flex;
     align-items: center;
     justify-content: center;
-
     animation: doodleScroll 80s linear infinite;
     clip-path: circle(150% at 50% 50%);
-    transition: clip-path 2.2s cubic-bezier(0.8, 0, 0.2, 1);
+    transition: clip-path 2s ease;
 }
 
 @keyframes doodleScroll {
@@ -38,30 +31,14 @@ body {
 }
 
 .portal-card {
-    background: #fff;
+    background: white;
+    color: black;
     padding: 50px;
-    border: 12px solid #000;
-    transform: rotate(-3deg);
-    cursor: pointer;
-    text-align: center;
+    border: 10px solid black;
 }
 
-.portal-card h1 {
-    font-family: 'Bebas Neue';
-    font-size: 5rem;
-    color: #000;
-}
-
-.portal-card p {
-    color: #000;
-    font-weight: 900;
-    letter-spacing: 5px;
-}
-
-/* ===== APP ===== */
-.hidden {
-    display: none;
-}
+/* APP */
+.hidden { display:none; }
 
 #app {
     height: 100vh;
@@ -69,37 +46,23 @@ body {
     flex-direction: column;
 }
 
-/* ===== BACKGROUND (DARK COLOR FLOW) ===== */
-.bg {
+/* 3D CANVAS */
+#scene {
     position: fixed;
     inset: 0;
     z-index: -1;
-    background: linear-gradient(130deg, #050505, #0a0a0a, #050505);
-    background-size: 400% 400%;
-    animation: darkFlow 25s ease infinite;
 }
 
-@keyframes darkFlow {
-    0% { background-color: hsl(0,40%,5%); background-position:0% 50%; }
-    20% { background-color: hsl(280,40%,5%); }
-    40% { background-color: hsl(210,40%,5%); }
-    60% { background-color: hsl(150,40%,5%); background-position:100% 50%; }
-    80% { background-color: hsl(40,40%,5%); }
-    100% { background-color: hsl(360,40%,5%); background-position:0% 50%; }
-}
-
-/* ===== HEADER ===== */
+/* HEADER */
 header {
-    padding: 30px;
+    padding: 20px;
 }
 
 #title {
-    font-size: clamp(3rem, 10vw, 5rem);
-    line-height: 0.9;
-    transition: all 2s ease;
+    font-size: 4rem;
 }
 
-/* ===== LIST ===== */
+/* LIST */
 .list {
     flex: 1;
     overflow-y: auto;
@@ -109,18 +72,12 @@ header {
 .track {
     padding: 20px;
     margin-bottom: 10px;
-    border-radius: 20px;
     background: rgba(255,255,255,0.05);
+    border-radius: 20px;
     backdrop-filter: blur(20px);
-    cursor: pointer;
-    transition: 0.3s;
 }
 
-.track:hover {
-    transform: scale(1.03);
-}
-
-/* ===== PLAYER ===== */
+/* PLAYER */
 .player {
     padding: 20px;
     backdrop-filter: blur(30px);
@@ -132,24 +89,8 @@ header {
     gap: 30px;
 }
 
-.controls button {
+button {
     width: 60px;
     height: 60px;
     border-radius: 50%;
-    background: white;
-    color: black;
-    border: none;
-    cursor: pointer;
-}
-
-.progress {
-    height: 6px;
-    background: rgba(255,255,255,0.2);
-    margin-top: 15px;
-}
-
-#fill {
-    height: 100%;
-    width: 0%;
-    background: white;
 }
