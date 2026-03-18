@@ -8,8 +8,8 @@
   "orientation": "portrait",
   "icons": [
     {
-      "src": "theme_artwork.jpg",
-      "sizes": "400x400",
+      "src": "angryemoji.jpg",
+      "sizes": "2880x2880",
       "type": "image/jpeg",
       "purpose": "any"
     }
