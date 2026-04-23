@@ -135,7 +135,7 @@
       playedHistory.push(i);
       audio.src = songs[i].url;
       audio.play().catch(()=>{});
-      playBtn.innerText = "↺";
+      playBtn.innerText = "||";
       updateMediaSession();
       renderList();
       updateTrackDisplay();
