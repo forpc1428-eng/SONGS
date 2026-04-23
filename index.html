@@ -17,11 +17,11 @@
     :root { --accent: #00f2ff; --glass-bg: rgba(20, 20, 20, 0.7); --glass-border: rgba(255, 255, 255, 0.1); }
     body { margin: 0; background: #000; color: #fff; font-family: 'Montserrat', sans-serif; display: flex; flex-direction: column; height: 100vh; overflow: hidden; transition: background 1s ease; }
     
-    #portal { position: fixed; inset: 0; z-index: 10000; background: #fff; background-image: url('https://ik.imagekit.io/22h7wv5o2/doodle.jpg?updatedAt=1773773281436'); background-size: 500px; display: flex; align-items: center; justify-content: center; transition: clip-path 2.2s cubic-bezier(0.8, 0, 0.2, 1); clip-path: circle(150% at 50% 50%); animation: doodleScroll 80s linear infinite; }
+    #portal { position: fixed; inset: 0; z-index: 10000; background: #fff; background-image: url('https://ik.imagekit.io/22h7wv5o2/doodle.jpg?updatedAt=1773773281436'); background-size: 500px; display: flex; align-items: center; justify-content: center; transition: opacity 2s ease; animation: doodleScroll 80s linear infinite; }
     @keyframes doodleScroll { from {background-position:0 0;} to {background-position:400px 400px;} }
     .portal-card { background: #fff; padding: 50px; border: 12px solid #000; box-shadow: 10px 10px 0 #000; transform: rotate(-3deg); text-align: center; cursor: pointer; transition: 0.4s; }
     .portal-card h1 { font-family: 'Bebas Neue'; font-size: clamp(2rem, 12vw, 5rem); color: #000; margin:0; }
-    .melt-exit { clip-path: circle(0% at 50% 50%) !important; pointer-events: none; }
+    .melt-exit { opacity: 0 !important; pointer-events: none; }
     @keyframes doodleScroll { from {background-position:0 0;} to {background-position:400px 400px;} }
     .portal-card { background: #fff; padding: 50px; border: 12px solid #000; box-shadow: 10px 10px 0 #000; transform: rotate(-3deg); text-align: center; cursor: pointer; transition: 0.4s; }
     .portal-card h1 { font-family: 'Bebas Neue'; font-size: clamp(2rem, 12vw, 5rem); color: #000; margin:0; }
@@ -85,7 +85,7 @@
     <div class="progress" onclick="seek(event)"><div class="fill" id="fill"></div></div>
     <div class="controls">
       <div class="btn" onclick="prev()">⏮</div>
-      <div class="btn" id="play-trigger" onclick="toggle()">▶</div>
+      <div class="btn" id="play-trigger" onclick="toggle()">▷</div>
       <div class="btn" onclick="next()">⏭</div>
       <div class="btn shuffle" id="shuffle" onclick="toggleShuffle()">⇄</div>
     </div>
@@ -135,7 +135,7 @@
       playedHistory.push(i);
       audio.src = songs[i].url;
       audio.play().catch(()=>{});
-      playBtn.innerText = "II";
+      playBtn.innerText = "↺";
       updateMediaSession();
       renderList();
       updateTrackDisplay();
@@ -150,10 +150,10 @@
     function toggle() {
       if(audio.paused){
         audio.play().catch(()=>{});
-        playBtn.innerText="II";
+        playBtn.innerText="||";
       } else {
         audio.pause();
-        playBtn.innerText="▶";
+        playBtn.innerText="▷";
       }
     }
 
